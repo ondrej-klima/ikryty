@@ -181,6 +181,7 @@ export default {
 				id: null
 			},
 			sidebar: null,
+			sidebarToggleControl: null,
 			zoom: 13,
 			baseLayers: baseLayers.baseLayers,
 			wmsBaseLayers: wmsBaseLayers.wmsBaseLayers,
@@ -369,7 +370,7 @@ export default {
 			return (feature, layer) => {
 				layer.on('click', () => {
 					useSearchStore().setSelectedBuildingId(feature.id)
-					this.sidebar?.show()
+					this.showSidebar()
 				})
 
 				layer.bindTooltip(feature.properties.name || feature.properties.address|| 'Úkryt ' + feature.id)/*,
@@ -426,6 +427,22 @@ export default {
 	},
 
 	methods: {
+		showSidebar() {
+			if (!this.sidebar) {
+				return
+			}
+
+			this.sidebar.show()
+			this.sidebarToggleControl?.state('hide-sidebar')
+		},
+		hideSidebar() {
+			if (!this.sidebar) {
+				return
+			}
+
+			this.sidebar.hide()
+			this.sidebarToggleControl?.state('show-sidebar')
+		},
 		getShelterMarkerColor(feature) {
 			if (feature.properties.SC == null) {
 				return 'yellow'
@@ -472,21 +489,19 @@ export default {
 				this.sidebar = sidebar
 
 				// https://www.npmjs.com/package/leaflet-easybutton
-				L.easyButton({
+				this.sidebarToggleControl = L.easyButton({
 				states: [{
 					stateName: 'show-sidebar',
 					icon: '&equiv;',
 					title: this.$t('menu.showMenu'),
-					onClick: function (control) {
-					sidebar.show()
-					control.state('hide-sidebar');
+					onClick: () => {
+						this.showSidebar()
 					}
 				}, {
 					icon: '&equiv;',
 					stateName: 'hide-sidebar',
-					onClick: function (control) {
-					sidebar.hide()
-					control.state('show-sidebar');
+					onClick: () => {
+						this.hideSidebar()
 					},
 					title: this.$t('menu.hideMenu')
 				}]
