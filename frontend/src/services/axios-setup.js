@@ -39,9 +39,9 @@ import axios from 'axios';
 export function setupAxiosInterceptors(keycloak) {
   // --- Configure Global Axios Defaults ---
   axios.defaults.withCredentials = true;
-  //axios.defaults.baseURL = 'http://localhost:8000';
+  axios.defaults.baseURL = 'http://localhost:8000';
   //axios.defaults.baseURL = 'https://civildefense.fit.vutbr.cz:8000';
-  axios.defaults.baseURL = 'https://api.civildefense.fit.vutbr.cz';
+  //axios.defaults.baseURL = 'https://api.civildefense.fit.vutbr.cz';
 
   // --- Add the Global Request Interceptor ---
   axios.interceptors.request.use(

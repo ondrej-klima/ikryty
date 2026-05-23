@@ -1,4 +1,5 @@
 aiosqlite==0.17.0
+aiofiles==24.1.0
 annotated-types==0.5.0
 anyio==3.7.1
 asyncmy==0.2.8

@@ -54,4 +54,5 @@ def home():
 
 
 if __name__ == '__main__':
-    uvicorn.run("main:app", port=8000, host="civildefense.fit.vutbr.cz", reload=True, ssl_keyfile="/etc/letsencrypt/live/civildefense.fit.vutbr.cz/privkey.pem", ssl_certfile="/etc/letsencrypt/live/civildefense.fit.vutbr.cz/fullchain.pem")
+    #uvicorn.run("main:app", port=8000, host="civildefense.fit.vutbr.cz", reload=True, ssl_keyfile="/etc/letsencrypt/live/civildefense.fit.vutbr.cz/privkey.pem", ssl_certfile="/etc/letsencrypt/live/civildefense.fit.vutbr.cz/fullchain.pem")
+    uvicorn.run("main:app", port=8000, host="localhost", reload=True)
