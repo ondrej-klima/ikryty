@@ -6,6 +6,7 @@ from tortoise import Tortoise
 
 from src.database.register import register_tortoise
 from src.database.config import TORTOISE_ORM
+from src.settings import get_uvicorn_run_kwargs
 
 Tortoise.init_models(["src.database.models"], "models")
 from src.routes import shelters, targets, routes
@@ -54,5 +55,4 @@ def home():
 
 
 if __name__ == '__main__':
-    #uvicorn.run("main:app", port=8000, host="civildefense.fit.vutbr.cz", reload=True, ssl_keyfile="/etc/letsencrypt/live/civildefense.fit.vutbr.cz/privkey.pem", ssl_certfile="/etc/letsencrypt/live/civildefense.fit.vutbr.cz/fullchain.pem")
-    uvicorn.run("main:app", port=8000, host="localhost", reload=True)
+    uvicorn.run("main:app", **get_uvicorn_run_kwargs())

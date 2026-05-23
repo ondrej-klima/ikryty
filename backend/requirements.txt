@@ -38,3 +38,4 @@ requests~=2.32.4
 pyproj~=3.7.1
 numpy~=2.2.6
 scipy~=1.15.3
+python-dotenv==1.0.1
