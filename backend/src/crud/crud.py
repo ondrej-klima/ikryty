@@ -66,6 +66,7 @@ UPLOADS_DIR = Path("uploads")
 UPLOADS_DIR.mkdir(exist_ok=True)
 
 BUILDING_EXPORT_FIELDS = [
+    "user_id",
     "building_code",
     "name_address",
     "gps_lat",
@@ -104,6 +105,7 @@ BUILDING_EXPORT_FIELDS = [
 ]
 
 SHELTER_EXPORT_FIELDS = [
+    ("user_id", "LOGIN", "Login uživatele"),
     ("building.building_code", "RS_1", "Identifikační kód stavby"),
     ("building.name_address", "RS_2", "Název / adresa stavby"),
     ("building.gps_lat", "RS_3", "GPS souřadnice (šířka, WGS-84)"),
@@ -136,6 +138,27 @@ SHELTER_EXPORT_FIELDS = [
     ("s_c", None, None),
     ("iu_class", None, None),
     ("assessment_needed", None, None),
+]
+
+BUILDING_FILE_EXPORT_FIELDS = [
+    ("user_id", "LOGIN", "Login uživatele"),
+    ("building_code", "RS_1", "Identifikační kód stavby"),
+    ("name_address", "RS_2", "Název / adresa stavby"),
+    ("gps_lat", "RS_3", "GPS souřadnice (šířka, WGS-84)"),
+    ("gps_long", "RS_3", "GPS souřadnice (délka, WGS-84)"),
+    ("attachment_type", "SOUBOR", "Typ přílohy"),
+    ("filename", "SOUBOR", "Název souboru"),
+]
+
+SHELTER_FILE_EXPORT_FIELDS = [
+    ("user_id", "LOGIN", "Login uživatele"),
+    ("building_code", "RS_1", "Identifikační kód stavby"),
+    ("building_name_address", "RS_2", "Název / adresa stavby"),
+    ("gps_lat", "RS_3", "GPS souřadnice (šířka, WGS-84)"),
+    ("gps_long", "RS_3", "GPS souřadnice (délka, WGS-84)"),
+    ("shelter_code", "RIÚ_4", "Identifikační kód IÚ"),
+    ("attachment_type", "SOUBOR", "Typ přílohy"),
+    ("filename", "SOUBOR", "Název souboru"),
 ]
 
 
@@ -231,16 +254,31 @@ def _autosize_columns(worksheet):
         worksheet.column_dimensions[column[0].column_letter].width = width
 
 
+def _has_valid_coordinates(latitude: Any, longitude: Any) -> bool:
+    return latitude not in (None, 0, 0.0, "") and longitude not in (None, 0, 0.0, "")
+
+
+def _extract_filename(path_value: str) -> str:
+    return Path(str(path_value)).name
+
+
+def _append_row(worksheet, values: List[Any]):
+    worksheet.append([_format_export_value(value) for value in values])
+
+
 def _build_export_workbook(buildings: List[models.Building]) -> bytes:
     workbook = Workbook()
     buildings_sheet = workbook.active
     buildings_sheet.title = "Registr staveb"
     shelters_sheet = workbook.create_sheet("Registr improvizovaných úkrytů")
+    building_files_sheet = workbook.create_sheet("Soubory staveb")
+    shelter_files_sheet = workbook.create_sheet("Soubory úkrytů")
 
     building_headers = []
     for field_name in BUILDING_EXPORT_FIELDS:
         abbreviation, caption = _parse_field_description(models.Building._meta.fields_map[field_name].description)
         building_headers.append((caption, abbreviation))
+    building_headers[0] = ("Login uživatele", "LOGIN")
     _set_sheet_headers(buildings_sheet, building_headers)
 
     shelter_headers = []
@@ -250,24 +288,65 @@ def _build_export_workbook(buildings: List[models.Building]) -> bytes:
         shelter_headers.append((caption, abbreviation))
     _set_sheet_headers(shelters_sheet, shelter_headers)
 
+    _set_sheet_headers(building_files_sheet, [(caption, abbreviation) for _, abbreviation, caption in BUILDING_FILE_EXPORT_FIELDS])
+    _set_sheet_headers(shelter_files_sheet, [(caption, abbreviation) for _, abbreviation, caption in SHELTER_FILE_EXPORT_FIELDS])
+
     for building in buildings:
-        buildings_sheet.append([
-            _format_export_value(getattr(building, field_name, None))
-            for field_name in BUILDING_EXPORT_FIELDS
-        ])
+        if not _has_valid_coordinates(building.gps_lat, building.gps_long):
+            continue
+
+        _append_row(
+            buildings_sheet,
+            [getattr(building, field_name, None) for field_name in BUILDING_EXPORT_FIELDS],
+        )
+
+        for attachment_type, field_name in (("Přílohy k S_SD", "s_sd_attachment"), ("Přílohy k S_IS", "s_is_attachment")):
+            for attachment_path in getattr(building, field_name, None) or []:
+                _append_row(
+                    building_files_sheet,
+                    [
+                        building.user_id,
+                        building.building_code,
+                        building.name_address,
+                        building.gps_lat,
+                        building.gps_long,
+                        attachment_type,
+                        _extract_filename(attachment_path),
+                    ],
+                )
 
         for shelter in building.shelters:
             shelter_row = []
             for field_name, _, _ in SHELTER_EXPORT_FIELDS:
                 source = building if field_name.startswith("building.") else shelter
                 path = field_name.removeprefix("building.")
-                shelter_row.append(_format_export_value(_resolve_attr(source, path)))
-            shelters_sheet.append(shelter_row)
+                shelter_row.append(_resolve_attr(source, path))
+            _append_row(shelters_sheet, shelter_row)
+
+            for attachment_type, field_name in (("Schéma prostoru", "schema_path"), ("Fotodokumentace", "photo_paths")):
+                for attachment_path in getattr(shelter, field_name, None) or []:
+                    _append_row(
+                        shelter_files_sheet,
+                        [
+                            shelter.user_id,
+                            building.building_code,
+                            building.name_address,
+                            building.gps_lat,
+                            building.gps_long,
+                            shelter.shelter_code,
+                            attachment_type,
+                            _extract_filename(attachment_path),
+                        ],
+                    )
 
     buildings_sheet.freeze_panes = "A3"
     shelters_sheet.freeze_panes = "A3"
+    building_files_sheet.freeze_panes = "A3"
+    shelter_files_sheet.freeze_panes = "A3"
     _autosize_columns(buildings_sheet)
     _autosize_columns(shelters_sheet)
+    _autosize_columns(building_files_sheet)
+    _autosize_columns(shelter_files_sheet)
 
     output = BytesIO()
     workbook.save(output)
