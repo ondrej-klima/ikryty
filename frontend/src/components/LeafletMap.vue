@@ -151,6 +151,8 @@ import 'leaflet.browser.print/dist/leaflet.browser.print'
 import 'leaflet-extra-markers/dist/css/leaflet.extra-markers.min.css';
 import 'leaflet-extra-markers/dist/js/leaflet.extra-markers.min.js';
 
+const GEOSEARCH_RESULT_ZOOM = 17;
+
 
 export default {
 	components: {
@@ -513,11 +515,17 @@ export default {
 				const search = new GeoSearchControl({
 				provider: provider,
 							showMarker: true,
-							searchLabel: 'Zadejte adresu'
+							searchLabel: 'Zadejte adresu',
+							updateMap: false
 				});
 
 				this.map.on('geosearch/showlocation', (data) => {
 					this.$data.geosearchLocation = data.location
+					this.map.setView(
+						[data.location.y, data.location.x],
+						GEOSEARCH_RESULT_ZOOM,
+						{ animate: true }
+					)
 				});
 
 				this.map.on('geosearch/marker/dragend', () => {
