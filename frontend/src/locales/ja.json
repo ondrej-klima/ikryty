@@ -1,0 +1,40 @@
+{
+  "message": {
+    "hello": "こんにちは、世界"
+  },
+  "shelter": {
+    "shelter": "シェルター",
+    "newShelter": "新しいシェルター",
+    "edit": "編集",
+    "delete": "消去",
+    "addShelter": "新しい避難所を追加する",
+    "editShelter": "特定された避難所を編集する",
+    "shelterName": "避難所名*",
+    "notice": "* 必須フィールドを示します",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "removeShelter": "シェルターを削除する",
+    "removeQuestion": "という名前のシェルターを削除してもよろしいですか{name}?"
+  },
+  "menu": {
+    "showMenu": "メニューを表示",
+    "hideMenu": "メニューを隠す",
+    "mainMenu": "メインメニュー"
+  },
+  "geolocation": {
+    "showMe": "私がどこにいるのか見せてください"
+  },
+  "user": {
+    "editAccount": "アカウントの編集",
+    "signOut": "サインアウト"
+  },
+  "login": {
+    "failed": "ログインに失敗しました。",
+    "userName": "ユーザー名",
+    "password": "パスワード",
+    "forgotPassword": "パスワードをお忘れですか？",
+    "warning": "警告: ログイン試行が 3 回連続して失敗すると、アカウントは 3 時間一時的にロックされます。 今すぐログインする必要がある場合は、[ログイン パスワードをお忘れですか?] をクリックすることもできます。 上記をクリックしてログインパスワードをリセットします。",
+    "logIn": "ログイン",
+    "signUp": "今すぐサインアップ"
+  }
+}

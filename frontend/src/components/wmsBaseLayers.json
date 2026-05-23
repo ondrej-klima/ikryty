@@ -1,0 +1,34 @@
+{
+  "wmsBaseLayers": [
+    {
+      "name": "ČÚZK GR_ZM50",
+      "visible": false,
+      "layers": "GR_ZM50",
+      "url": "http://geoportal.cuzk.cz/WMS_ZM50_PUB/WMService.aspx"
+    },
+    {
+      "name": "ČÚZK ZTM10",
+      "visible": false,
+      "layers": "0",
+      "url": "http://ags.cuzk.cz/arcgis1/services/ZTM/ZTM10/MapServer/WMSServer?"
+    },
+    {
+      "name": "ČÚZK Ortofoto ČR",
+      "visible": false,
+      "layers": "0",
+      "url": "https://ags.cuzk.cz/arcgis1/services/ORTOFOTO/MapServer/WMSServer?"
+    },
+    {
+      "name": "ČÚZK MČR1M",
+      "visible": false,
+      "layers": "0",
+      "url": "https://ags.cuzk.cz/arcgis1/services/ZTM/MCR1M/MapServer/WMSServer?"
+    },
+    {
+      "name": "ČÚZK Katastr nemovitostí",
+      "visible": false,
+      "layers": "KN",
+      "url": "https://services.cuzk.cz/wms/wms.asp?"
+    }
+  ]
+}

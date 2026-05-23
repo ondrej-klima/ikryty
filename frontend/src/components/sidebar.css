@@ -1,0 +1,31 @@
+.leaflet-touch .leaflet-sidebar > .leaflet-control {
+    border: none;
+}
+.leaflet-sidebar > .leaflet-control {
+    background: none;
+}
+.leaflet-sidebar.left {
+    left: -700px;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .leaflet-sidebar {
+        width: 405px; }
+    .leaflet-sidebar.left.visible ~ .leaflet-left {
+        left: 405px; }
+    .leaflet-sidebar.right.visible ~ .leaflet-right {
+        right: 405px; } }
+@media (min-width: 992px) and (max-width: 1199px) {
+    .leaflet-sidebar {
+        width: 600px; }
+    .leaflet-sidebar.left.visible ~ .leaflet-left {
+        left: 600px; }
+    .leaflet-sidebar.right.visible ~ .leaflet-right {
+        right: 600px; } }
+@media (min-width: 1200px) {
+    .leaflet-sidebar {
+        width: 600px; }
+    .leaflet-sidebar.left.visible ~ .leaflet-left {
+        left: 600px; }
+    .leaflet-sidebar.right.visible ~ .leaflet-right {
+        right: 600px; } }

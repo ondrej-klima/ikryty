@@ -1,0 +1,455 @@
+{
+  "message": {
+    "hello": "Hello World!"
+  },
+  "shelter": {
+    "title": "Record of Improvised Shelter",
+    "shelter": "Shelter",
+    "newShelter": "New Shelter",
+    "edit": "Edit",
+    "delete": "Delete",
+    "close": "Zavřít",
+    "addShelter": "Add New Shelter",
+    "editShelter": "Edit Shelter",
+    "shelterName": "Title",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "notice": "* indicates required field",
+    "save": "Save",
+    "cancel": "Cancel",
+    "removeShelter": "Delete Shelter",
+    "removeQuestion": "Are you sure to remove the shelter {name}?",
+    "position": "Position",
+    "evaluation": "Evaluation",
+    "parameters": "Construction Parameters",
+    "shelterAddress": "Address",
+    "shelterDescription": "Description",
+    "evalh1": "Evaluation of the Protective Properties of Improvised Shelters",
+    "evalDesc": "This phase includes a basic assessment of the protective properties of spaces suitable for improvised shelter and located in structures identified in the first phase of the improvised shelter identification procedure (section 3.6.1). These are spaces identified by the procedure set out in section 3.5.1(c) in structures that were not subsequently excluded due to insufficient capacity according to the criterion set out in section 3.5.1(d). These spaces will be referred to as “improvised shelters” in this subsection."
+  },
+  "target": {
+    "title": "Record of Possible Target",
+    "editDialog": "Address and Position of Target",
+    "target": "Target",
+    "newTarget": "New Target",
+    "edit": "Edit",
+    "delete": "Delete",
+    "addTarget": "Add New Target",
+    "editTarget": "Edit Shelter",
+    "targetName": "Title",
+    "targetDescription": "Description",
+    "targetAddress": "Address",
+    "longitude": "Longitude",
+    "latitude": "Latitude",
+    "notice": "* indicates required field",
+    "save": "Save",
+    "cancel": "Cancel",
+    "removeTarget": "Delete Target",
+    "removeQuestion": "Are you sure to remove the target {name}?"
+  },
+  "menu": {
+    "showMenu": "Show Objects Overview",
+    "hideMenu": "Hide Objects Overview",
+    "mainMenu": "Objects Overview",
+    "shelters": "Shelters",
+    "targets": "Targets"
+  },
+  "geolocation": {
+    "showMe": "Show me where I am, yo!"
+  },
+  "user": {
+    "editAccount": "Edit Account",
+    "signOut": "Sign out"
+  },
+  "login": {
+    "failed": "Login failed.",
+    "userName": "Account",
+    "password": "Password",
+    "forgotPassword": "Forgot login password?",
+    "warning": "Warning: After 3 consecutive failed login attempts, you account will be temporarily locked for three hours. If you must login now, you can also click \"Forgot login password?\" above to reset the login password.",
+    "logIn": "Log In",
+    "signUp": "Sign up now"
+  },
+   "step1": {
+    "info": {
+      "title": "A1 – Vymezení území a staveb",
+      "description": "Vymezit území a registr staveb potenciálně využitelných pro vybudování improvizovaného úkrytu.",
+      "detail": "RS1 – registr staveb potenciálně využitelných pro vybudování improvizovaného úkrytu (dále jen „registr staveb“) zanesený do mapového podkladu"
+    },
+    "form_title": "Tabulka 3-2: Struktura informací zapisovaných v kroku A1 do registru staveb (RS1)",
+    "procedure": {
+      "intro": "Cílem kroku A1 je určit rozsah území, pro které je plánováno ukryt obyvatelstva, a sestavit prvotní seznam staveb reálně využitelných pro budování IÚ, aniž by se v této fázi hodnotily jejich ochranné vlastnosti. Hlavním kritériem výběru jsou vlastnicko-právní a provozní dostupnost stavby pro případné úpravy a užití (typicky stavby ve vlastnictví obce). Každé identifikované stavbě se přiřadí jednoznačný kód a zaznamená se do registru RS1; povinné položky jsou uvedeny v tabulce 3-2. Současně se stavby zakreslí do mapového podkladu (GIS) s adresou a souřadnicemi. Cílem kroku A1 je úplnost pokrytí území – identifikují se všechny reálně dostupné stavby na daném území. RS1 slouží jako výchozí registr, který bude v následujících krocích (A2 a další) doplňován o další údaje.",
+      "title": "Postup A1:",
+      "step1": "Vymezení území, pro které je plánováno ukrytí obyvatelstva, (např. katastr obce, sektor) a stanovení časového harmonogramu prací a odpovědné osoby;",
+      "step2": "Shromáždění vstupních údajů (zdrojem dat může být např. katastr nemovitostí, pasport majetku, GIS, místní znalost);",
+      "step3": "Stanovení kritérií zařazení, zejména vlastnicko-právní a provozní dostupnost, kapacitní potenciál jen orientačně (podzemí, suterén, vnitřní trakt), bez posuzování odolnosti stavby;",
+      "step4": "Identifikace stavby splňující kritéria a jejich rozdělení podle typu stavby (administrativní, škola, bytový dům, sportovní, obchodní centrum apod.).",
+      "step5": "Založení záznamu RS1 pro každou stavbu, přiřazení kód stavby (S1, S2, …) a vyplnění povinných údajů (viz tabulka 3-2);",
+      "step6": "Provedení kontroly kvality dat (zejména odstranění duplicit, kontrola úplnosti a správnosti údajů)."
+    },
+    "rs1": "RS_1: Identifikační kód stavby",
+    "rs1_hint": "Doporučuje se volit kódy ve formátu S1, S2, …",
+    "rs2": "RS_2: Název / adresa stavby",
+    "rs2_hint": "Název objektu (je-li užíván) a úplná adresa.",
+    "rs3_lat": "RS_3: GPS souřadnice (šířka)",
+    "rs3_long": "RS_3: GPS souřadnice (délka)",
+    "rs4": "RS_4: Vlastník",
+    "rs4_hint": "Subjekt a kontaktní osoba (je-li známa).",
+    "rs5a": "RS_5: Správce",
+    "rs5a_hint": "Správce objektu",
+    "rs5_title": "RS_6: Přístupnost / režim",
+    "rs5_operationType": "RS_6: Typ provozu",
+    "rs5_access": "RS_6: Předběžné omezení vstupu",
+    "rs5_hint": "např. obecní, školské, zdravotnické nebo průmyslové zařízení",
+    "rs6": "RS_7: Typ objektu / účel stavby",
+    "rs6_hint": "např. Administrativní, škola, bytový dům, sportovní",
+    "rs7_title": "RS_8: Dostupné prostory (hodnotí se pouze dostupnost ANO/NE)",
+    "rs7_underground": "Podzemí",
+    "rs7_basement": "Suterén",
+    "rs7_innerWing": "Vnitřní trakt",
+    "rs8": "RS_9: Omezení stavebních úprav",
+    "rs8_hint": "Známá omezení (např. památková ochrana, nájemní vztahy), očekávaná rychlost schválení.",
+    "rs9": "RS_10: Zdroj vstupních dat",
+    "rs9_hint": "např. Katastr nemovitostí, GIS, Místní šetření (hodnoty oddělte čárkou).",
+    "rs10": "RS_11: Datum vytvoření záznamu",
+    "rs10_pickerTitle": "Datum vytvoření",
+    "rs10_pickerHeader": "Vyberte datum",
+    "rs11": "RS_12: Odpovědná osoba",
+    "rs11_hint": "Jméno osoby, která záznam vytvořila."
+  },
+ "step2": {
+    "info": {
+      "title": "A2 – Analýza území",
+      "description": "Vyloučit objekty umístěné v rizikových oblastech.",
+      "detail": "RS2 – aktualizovaný registr staveb (po vyloučení staveb umístěných v rizikových oblastech)"
+    },
+    "form_title": "Tabulka 3-7: Povinné informace uvedené v registru RS2 pro stavby nacházející se v rizikových oblastech",
+    "procedure": {
+      "intro": "Cílem A2 je vyloučit z dalšího hodnocení stavby umístěné v oblastech nevhodných pro umístění improvizovaných úkrytů (dále jen „riziková oblast“) dle kritérií uvedených v tabulkách 3-4 až 3-7.",
+      "title": "Postup A2:",
+      "step1": "Na mapě zobrazit rizikové oblasti dle tabulky 3-4;",
+      "step2": "Vytvořit registr RS2 vyloučením staveb z registru RS1, které jsou zcela nebo částečně umístěné v těchto oblastech. Stavby nacházejících se v těchto oblastech lze v odůvodněných případech zahrnout do registru RS2. V takovém případě je však do registru RS2 nezbytné přidat k dané stavbě informaci o jejím umístění v rizikové oblasti a uvedení zdůvodnění jejího zařazení do registru RS2 dle vzoru uvedeného v tabulce 3-7."
+    },
+    "rs13": "RS_14: Riziková oblast",
+    "rs13_hint": "Vymezení rizikové oblasti dle tabulek 3-4 až 3-6 (např. bezpečnostní pásmo podzemního zásobníku plynu, nebo záplavové území)",
+    "rs14": "RS_15: Odůvodnění zařazení",
+    "rs14_hint": "Odůvodnění zařazení stavby do registru RS2 i přes umístění stavby v rizikové oblasti",
+    "tables_title": "Referenční tabulky rizikových oblastí",
+    "panel_titles": {
+      "table1": "Tabulka 3-4: Kontrolní seznam vrstev pro A2",
+      "table2": "Tabulka 3-5: Bezpečnostní pásma plynových zařízení",
+      "table3": "Tabulka 3-6: Ochranná a bezpečnostní pásma liniových staveb"
+    },
+    "table1": {
+      "title": "Tabulka 3-4: Kontrolní seznam vrstev pro A2 a doporučený zdroj dat.",
+      "headers": { "col1": "Rizikové území", "col2": "Typický zdroj dat" }
+    },
+    "table2": {
+      "title": "Tabulka 3-5: Plynová zařízení – bezpečnostní pásma dle energetického zákona.",
+      "headers": { "col1": "Plynové zařízení", "col2": "Bezpečnostní pásmo", "col3": "Vysvětlivka" }
+    },
+    "table3": {
+      "title": "Tabulka 3-6: Liniové stavby – ochranná a bezpečnostní pásma",
+      "headers": { "col1": "Vedení / Napěťová úroveň", "col2": "Ochranné pásmo", "col3": "Typ uložení", "col4": "Zdroj" }
+    }
+  },
+ "step3": {
+    "edit_shelter_title": "Parametry úkrytu:",
+    "no_building_selected": "Pro tento krok nejprve vyberte nebo vytvořte stavbu v kroku A1.",
+    "info": {
+      "title": "A3 – Identifikace prostorů vhodných k vybudování improvizovaného úkrytu",
+      "goal1": "Identifikovat prostory vhodné k vybudování improvizovaného úkrytu.",
+      "goal2": "Určit kapacitu IÚ.",
+      "goal3": "Vyloučit stavby, které nedisponují žádným prostorem vhodným k vybudování IÚ.",
+      "output1": "RS3 – aktualizovaný registr staveb (po vyloučení staveb s nedostatečnými ochrannými vlastnostmi)",
+      "output2": "RIÚ1 – registr IÚ",
+      "output3": "NK – kapacita úkrytu"
+    },
+    "form1_title": "Tabulka 3-11: Struktura informací v registru improvizovaných úkrytů RIÚ1",
+    "shelter_title": "Úkryt #{num}",
+    "riu1": "RIÚ_1: Identifikační kód stavby",
+    "riu2": "RIÚ_2: Adresa",
+    "riu3": "RIÚ_3: GPS souřadnice",
+    "riu4": "RIÚ_4: Identifikační kód IÚ",
+    "riu4_hint": "Formát S1-1, S1-2, …",
+    "riu5": "RIÚ_5: Umístění IÚ",
+    "riu6": "RIÚ_6: Schéma prostoru",
+    "riu6_hint": "Nákres s vyznačením vstupu/výstupu",
+    "riu7": "RIÚ_7: Fotodokumentace",
+    "riu7_hint": "Min. 3 snímky prostoru",
+    "riu8": "RIÚ_8: S [m²] (Plocha IÚ)",
+    "riu9": "RIÚ_9: h [m] (Světlá výška IÚ)",
+    "riu10": "RIÚ_10: V_TP [m³] (Objem trvalých překážek)",
+    "riu11": "RIÚ_11: V [m³] (Užitný objem)",
+    "riu11_hint": "Výpočet dle rovnice (1)",
+    "riu12": "RIÚ_12: N_K (Kapacita - krátkodobá)",
+    "riu12_hint": "V / 3",
+    "riu13": "RIÚ_13: N_KS (Kapacita - střední)",
+    "riu13_hint": "V / 5",
+    "riu14": "RIÚ_14: N_KD (Kapacita - dlouhodobá)",
+    "riu14_hint": "V / 8",
+    "riu15": "RIÚ_15: N_KO (Očekávaný počet osob)",
+    "riu15_hint": "Pokud znám No ≤ NK",
+    "riu16": "RIÚ_16: Větrání",
+    "riu17": "RIÚ_17: Nouzové východy / výlezy",
+    "riu18": "RIÚ_18: Elektrická energie",
+    "riu19": "RIÚ_19: Technická uzávěra energií",
+    "isChuc_label": "IÚ je v prostoru chráněné únikové cesty (CHÚC)",
+    "riu20": "RIÚ_20: Označení a typ CHÚC",
+    "riu21": "RIÚ_21: Skutečná délka trasy CHÚC [m]",
+    "riu22": "RIÚ_22: Způsob větrání CHÚC",
+    "riu23": "RIÚ_23: Nosné stěny v obálce CHÚC/PÚ",
+    "riu23_hint": "Popis nosných prvků (REI 45+; DP1)",
+    "form2_title": "Tabulka 3-10: Povinné informace uvedené v registru RS3",
+    "rs15": "RS_16: Nedostatek",
+    "rs15_hint": "Uvedení informace o nesplnění minimálních požadavků nebo kapacity",
+    "rs16": "RS_17: Odůvodnění zařazení",
+    "rs16_hint": "Odůvodnění zařazení stavby do registru RS3 i přes uvedený nedostatek",
+    "procedure": {
+      "intro": "Cílem tohoto kroku je identifikace takových prostor v rámci kandidátních staveb zahrnutých do registru RS2, které jsou vhodné k vybudování improvizovaného úkrytu. Na tomto základě je vytvořen registr staveb RS3, obsahující informace o stavbách s plánovaným IÚ, a registr kandidátních improvizovaných úkrytů RIÚ1 obsahující informace o jednotlivých vybraných IÚ.",
+      "title": "Postup A3:",
+      "step1": "Pro každou stavbu v RS2 identifikovat prostory využitelné k vybudování IÚ (kandidátní IÚ), preferovány suterény a vnitřní trakty. Nutno respektovat minimální požadavky dle tabulky 3-8.",
+      "step2": "Pro každou stavbu stanovit kapacitu kandidátních IÚ. Užitný objem V = S∙h - V_TP. Kapacita N_K = V/3. Pokud je celková kapacita < 50 osob, stavba se vyřazuje.",
+      "step3": "Vytvořit registr RS3 vyloučením staveb bez dostatečné kapacity. Odůvodněné výjimky lze zapsat dle tabulky 3-10.",
+      "step4": "Vytvořit registr RIÚ1 pro kandidátní IÚ ve stavbách z RS3 dle tabulky 3-11. Pro IÚ v CHÚC doplnit údaje z PBŘ."
+    },
+    "tables_title": "Referenční tabulky",
+    "panel_titles": {
+      "table1": "Tabulka 3-8: Minimální požadavky na prostory",
+      "table2": "Tabulka 3-9: Typy chráněných únikových cest (CHÚC)"
+    },
+    "table1": {
+      "title": "Tabulka 3-8: Minimální požadavky pro jednotlivé typy prostor",
+      "headers": {
+        "col1": "Prostor",
+        "col2": "Minimální požadavky"
+      }
+    },
+    "table2": {
+      "title": "Tabulka 3-9: Typy chráněných únikových cest",
+      "headers": {
+        "col1": "Typ CHÚC",
+        "col2": "Max. délka",
+        "col3": "Konstrukce obálky",
+        "col4": "Dveře",
+        "col5": "Větrání",
+        "col6": "Poznámka"
+      }
+    }
+  },
+  "step4": {
+    "info": {
+      "title": "A4 – Hodnocení odolnosti konstrukce stavby",
+      "description": "V kroku A4 se u každé stavby z registru RS3, zda nosný systém a vnitřní dispozice splňují minimální požadavky na robustnost a omezují riziko progresivního kolapsu. Hodnocení vychází z vizuální prohlídky, dostupných výkresů statiky a z limitních tlouštěk a principů převzatých z UFC a Eurokódů. Pro každý kandidátní IÚ z registru RIÚ1 se následně staví skóre ochranných vlastností IÚ (S_OV)."
+    },
+    "form1_title": "Tabulka 3-20: Údaje doplněné do registru staveb RS4",
+    "rs17": "RS_18: Konstrukční materiál nosných stěn",
+    "rs18": "RS_19: Tloušťka nosných stěn [mm]",
+    "rs19": "RS_20: S_OK (Skóre odolnosti konstrukce)",
+    "rs19_hint": "Stanoveno dle tabulek 3-12 až 3-17",
+    "rs20": "RS_21: S_SD (Skóre dělící spáry)",
+    "rs20_hint": "Stanoveno dle tabulky 3-18",
+    "rs21": "RS_22: Příloha k S_SD",
+    "rs21_hint": "Fotodokumentace a nákresy k dělícím spárám",
+    "rs22": "RS_23: S_IS (Skóre integrity nosných stěn)",
+    "rs22_hint": "Stanoveno dle tabulky 3-18",
+    "rs23": "RS_24: Příloha k S_IS",
+    "rs23_hint": "Fotodokumentace k nevyztuženým otvorům",
+    "rs24": "RS_25: Možné T-úpravy",
+    "rs24_hint": "Popis možných T-úprav pro zvýšení ochranných vlastností IÚ",
+
+    "form2_title": "Tabulka 3-21: Údaje doplněné do registru improvizovaných úkrytů RIÚ2",
+    "riu29": "RIÚ_29: S_PU (Skóre prostoru umístění IÚ)",
+    "riu29_hint": "Stanoveno dle tabulky 3-19",
+    "riu30": "RIÚ_30: S_CHUC (Skóre umístění IÚ v CHÚC)",
+    "riu30_hint": "Stanoveno dle tabulky 3-19",
+    "riu31": "RIÚ_31: S_OV (Skóre ochranných vlastností IÚ)",
+    "riu31_hint": "Stanoveno dle vzorce (3)",
+    "riu32": "RIÚ_32: Možné T-úpravy",
+    "riu32_hint": "Popis možných T-úprav (shoduje se s RS_24)",
+
+    "procedure": {
+      "intro": "V tomto kroku se stavby nevyřazují; případné limity se promítnou do doporučení T-úprav (bariéry / zodolnění obálky / přesun funkcí).",
+      "title": "Postup A4:",
+      "step1": "Zjištění materiálu a tloušťky nosných stěn / obálky stavby;",
+      "step2": "Hodnocení konstrukčního materiálu a tloušťky nosných stěn se provede dle tabulek 3-12 až 3-17. Tímto postupem je stavbě přiřazeno skóre odolnosti konstrukce (S_OK);",
+      "step3": "Pro zhodnocení kontinuity svislých prvků nosné konstrukce se pro každou stavu z registru RS3 stanoví hodnota skóre dělící spáry (S_SD) a skóre integrity nosných stěn (S_IS) dle tabulky 3-18;",
+      "step4": "Po zhodnocení ochranných vlastností daných umístěním kandidátního IÚ v rámci stavby se pro každý kandidátní IÚ z registru RIÚ1 stanoví skóre prostoru umístění IÚ (S_PU) a skóre umístění IÚ v CHÚC (S_CHUC) dle tabulky 3-19;",
+      "step5": "Stanovení skóre ochranných vlastností IÚ (S_OV) podle vzorce: S_OV = 0,4*S_OK + 0,2*S_DS + 0,1*S_IS + 0,2*S_PU + 0,1*S_CHUC;",
+      "step6": "Vytvoření registru RS4 doplněním registru RS3 o údaje uvedené v tabulce 3-20 a vytvoření registru RIÚ2 doplněním RIÚ1 o údaje uvedené v tabulce 3-21. Do obou registrů lze uvést rovněž popis možných T-úprav pro zvýšení ochranných vlastností IÚ."
+    },
+    
+    "tables_title": "Referenční tabulky",
+    "panel_titles": {
+      "resistance": "Referenční tabulky odolnosti konstrukce (3-12 až 3-17)",
+      "integrity": "Hodnocení dělící spáry a integrity stěn (Tabulka 3-18)",
+      "location": "Hodnocení umístění IÚ (Tabulka 3-19)"
+    },
+    "tables_common": {
+      "scenario": "Scénář",
+      "note1": "<b>Pozn.:</b> <b>1</b> - Bariéra pravděpodobně odolá hrozbě; <b>0,5</b> - Bariéra hrozbu pravděpodobně zastaví, ale může dojít k vážnému poškození; <b>0</b> - Bariéra bude pravděpodobně proražena.",
+      "note2": "<b>Pozn.:</b> <b>0</b> - Bariéra bude pravděpodobně proražena nebo katastroficky selže."
+    },
+    "table12": { "title": "Tabulka 3-12: Železobeton C30/37" },
+    "table13": { "title": "Tabulka 3-13: Cihla plná pálená (CPP)" },
+    "table14": { "title": "Tabulka 3-14: Vápenopísková cihla (VPC)" },
+    "table15": { "title": "Tabulka 3-15: Pórobetonová tvárnice (YTONG / HEBEL)" },
+    "table16": { "title": "Tabulka 3-16: Dutinová tvárnice (POROTHERM)" },
+    "table17": { "title": "Tabulka 3-17: CLT panely (křížem lepené dřevo)" },
+    "table18": {
+      "title": "Tabulka 3-18: Hodnocení dělící spáry (S_SD) a integrity nosných stěn (S_IS)",
+      "headers": { "h1": "Hodnota skóre", "h2": "Skóre dělící spáry (S_SD)", "h3": "Skóre integrity nosných stěn (S_IS)" },
+      "rows": [
+        { "score": "0", "s_sd": "V nosné linii je alespoň jedna podezřelá dělící spára: souvislá výšková spára přes ≥ 2 NP bez prokázané kontinuity přenosu sil.", "s_is": "V nosných stěnách jsou nevyztužené otvory/prostupy, případně drážky/výklenky provedené mimo limity přípustné dle Eurokódů." },
+        { "score": "1", "s_sd": "Žádná podezřelá dělící spára, resp. kontinuita/přemostění je prokazatelně zajištěna (věnec, táhla, rám, výztuž).", "s_is": "Žádné nevyztužené otvory; všechny otvory mají překlad/rámovou výztuž, prostupy a drážky jsou v povolených limitech." }
+      ]
+    },
+    "manual18": {
+      "p1": "Pro stanovení správné <b>skóre dělící spáry (S_SD)</b> má zásadní význam rozpoznání podezřelé dělící spáry. Za podezřelou se považuje jakákoli souvislá konstrukční mezera přes kterou není prokazatelný bezpečný přenos sil. Patří sem zejména:",
+      "l1_1": "Dilatace/oddělovací spára bez mechanického spojení;",
+      "l1_2": "Styk přístavby bez vazby zdiva se spárou/trhlinou pokračující přes ≥ 2 NP;",
+      "l1_3": "Svislá souvislá trhlina v nosné stěně (cca ≥ 2 mm) opakující se ve více podlažích;",
+      "l1_4": "Spára prefabrikovaných panelů s chybějícím přeplátováním, svorníky, nebo injektáží;",
+      "l1_5": "Přerušený věnec v úrovni stropů bez prokázané kontinuity;",
+      "l1_6": "Velký dodatečný otvor bez rámového vyztužení, který funkčně rozdělí stěnu.",
+      "p2": "Za podezřelou spáru se <b>nepovažují</b>:",
+      "l2_1": "Vlasové trhlinky omítek nebo povrchové „mapy“;",
+      "l2_2": "Konstrukční spára doložená projektovou dokumentací, kde je prokazatelně zajištěn přenos sil.",
+      "p3": "Pro stanovení správné <b>skóre integrity nosných stěn (S_IS)</b> má zásadní význam rozpoznání nevyztuženého otvoru/prostupu. Každý dveřní/okenní otvor bez překladu či rámového vyztužení se považuje za nevyztužený.",
+      "sub1": "U zděných cihel se za nevyztužený otvor/prostup považuje:",
+      "l3_1": "Otvor/prostup s nejmenším rozměrem ≥ 200 mm bez lokálního vyztužení;",
+      "l3_2": "Drážky/výklenky, pokud zbývá méně než polovina původní tloušťky stěny;",
+      "l3_3": "Pilíř mezi otvory, pokud je jeho šířka menší než 1/6 šířky většího sousedního otvoru nebo 250 mm.",
+      "sub2": "U železobetonových stěn se za nevyztužený otvor/prostup považuje:",
+      "l4_1": "Prostup/otvor bez obvodové (lemovací) výztuže;",
+      "l4_2": "Vyřezaný zářez nebo drážka odhalující výztuž bez nové lokální výztuže/ocelového rámu."
+    },
+    "table19": {
+      "title": "Tabulka 3-19: Hodnocení prostoru umístění IÚ (S_PU) a umístění IÚ v CHÚC (S_CHUC)",
+      "headers": { "h1": "Hodnota skóre", "h2": "Skóre prostoru umístění IÚ (S_PU)", "h3": "Skóre umístění IÚ v CHÚC (S_CHUC)" },
+      "rows": [
+        { "score": "0", "s_pu": "Prostor ve vnitřním traktu", "s_chuc": "Prostor mimo CHÚC" },
+        { "score": "1", "s_pu": "Suterénní prostor", "s_chuc": "Prostor je umístěn uvnitř CHÚC" }
+      ]
+    }
+  },
+  "step5": {
+    "info": {
+      "title": "A5 – Hodnocení ohroženosti IÚ",
+      "description": "Určení skóre ohroženosti IÚ.",
+      "output1": "RIÚ3 – registr IÚ doplněný o údaje o ohroženosti IÚ",
+      "output2": "So – skóre ohroženosti IÚ"
+    },
+    "form_title": "Tabulka 3-23: Údaje zapisované do registru improvizovaných úkrytů RIÚ3",
+    "assessment_title": "Posouzení IÚ #{num}",
+    "riu33": "RIÚ_33: Vzdálenost od nejbližšího možného terče útoku",
+    "riu33_hint": "Udává se v metrech.",
+    "riu34": "RIÚ_34: S_O (Skóre ohroženosti IÚ)",
+    "riu34_hint": "Stanoveno dle tabulky 3-22",
+    "procedure": {
+      "intro": "Cílem kroku A5 je jednotně kvantifikovat míru ohroženosti každého kandidátního IÚ evidovaného v registru RIÚ2 podle jeho vzdálenosti od nejbližšího identifikovaného možného terče útoku (např. vojenské objekty, významné průmyslové objekty apod.). Na základě hodnocení ohroženosti IÚ je každému kandidátnímu IÚ skóre ohroženosti (S_O).",
+      "title": "Postup A5:",
+      "step1": "Identifikace objektů nacházejících se na území vymezeném v rámci kroku A1, u kterých lze vzhledem k jejich povaze předpokládat, že by se za ozbrojeného konfliktu mohly stát terčem útoku (dále jen „možný terč útoku“);",
+      "step2": "U každého IÚ z RIÚ2 změřit nejkratší vodorovnou vzdálenost k nejbližšímu možnému terči útoku;",
+      "step3": "Každému IÚ přiřadit skóre ohroženosti (S_O) podle tabulky 3-22;",
+      "step4": "Vytvoření registru RIÚ3 doplněním RIÚ2 o údaje uvedené v tabulce 3-23."
+    },
+    "tables_title": "Referenční tabulka",
+    "table": {
+      "title": "Tabulka 3-22: Bodové hodnocení ohroženosti IÚ",
+      "headers": {
+        "col1": "Vzdálenost IÚ od nebližšího možného terče útoku",
+        "col2": "Skóre ohroženosti (SO)"
+      }
+    }
+  },
+  "step6": {
+    "info": {
+      "title": "A6 – Celkové hodnocení IÚ",
+      "description": "Určení celkového skóre IÚ a klasifikace IÚ.",
+      "output1": "RIÚ4 – registr IÚ doplněný o údaje o celkovém skóre IÚ a jeho klasifikaci dle využitelnosti IÚ"
+    },
+    "form_title": "Tabulka 3-25: Údaje zapisované do registru improvizovaných úkrytů RIÚ4",
+    "assessment_title": "Celkové hodnocení IÚ #{num}",
+    "s_ov_input": "Vstupní S_OV (Skóre ochr. vlastností)",
+    "n_c_input": "Vstupní N_C (Celková kapacita)",
+    "s_o_input": "Vstupní S_O (Skóre ohroženosti)",
+    "s_sd_input": "Vstupní S_SD (Skóre dělící spáry)",
+    "s_is_input": "Vstupní S_IS (Skóre integrity stěn)",
+    "riu35": "RIÚ_35: S_C (Skóre celkové vhodnosti IÚ)",
+    "riu36": "RIÚ_36: Třída IÚ",
+    "riu37": "RIÚ_37: Nezbytnost odborného posouzení",
+    "procedure": {
+      "intro": "Cílem kroku A6 je provést celkové hodnocení IÚ evidovaných v registru RIÚ3 na základě hodnocení jejich ochranných vlastností, míry ohroženosti a kapacity.",
+      "title": "Postup A6:",
+      "step1": "Výpočet skóre celkové vhodnosti IÚ (S_C) podle vzorce: <b>S_C = (10*S_OV)/ ((2*N_K/100)**(1/3)*S_0)</b>. Improvizovaný úkryt se považuje za vhodný, pokud S_C ≥ 1.",
+      "step2": "Přiřazení priority každému kandidátnímu IÚ evidovanému v registru RIÚ3 dle tabulky 3-24;",
+      "step3": "Vytvoření registru RIÚ4 doplněním RIÚ3 o údaje uvedené v tabulce 3-25."
+    },
+    "tables_title": "Referenční tabulka",
+    "table": {
+      "title": "Tabulka 3-24: Přiřazení priority kandidátnímu IÚ (KIÚ) a doporučená opatření",
+      "headers": {
+        "col1": "Podmínky",
+        "col2": "Priorita IÚ",
+        "col3": "Doporučené opatření"
+      },
+      "rows": [
+        { "conditions": "S_C ≥ 5<br>S_SD = 1<br>S_IS = 1", "priority": "IÚ-I", "action": "Doporučuje se provedení odborného posouzení IÚ dle části B metodiky. Lze přímo využít pro plánování." },
+        { "conditions": "S_C ≥ 5<br>S_SD = 0 nebo S_IS = 0", "priority": "KIÚ-I", "action": "Využití k plánování IÚ je možné až po odborném posouzení KIÚ dle části B metodiky." },
+        { "conditions": "3 ≤ S_C < 5<br>S_SD = 1<br>S_IS = 1", "priority": "IÚ-II", "action": "Doporučuje se provedení odborného posouzení IÚ dle části B metodiky. Lze přímo využít pro plánování." },
+        { "conditions": "3 ≤ S_C < 5<br>S_SD = 0 nebo S_IS = 0", "priority": "KIÚ-II", "action": "Využití k plánování IÚ je možné až po odborném posouzení KIÚ dle části B metodiky." },
+        { "conditions": "1 ≤ S_C < 3", "priority": "KIÚ-III", "action": "Využití k plánování IÚ je možné až po odborném posouzení KIÚ dle části B metodiky." },
+        { "conditions": "S_C < 1", "priority": "KIÚ-N – nevhodné pro ukrytí", "action": "Nedoporučuje využít k plánování IÚ. Údaje o KIÚ-N se doporučuje archivovat." }
+      ]
+    }
+  },
+   "step7": {
+    "info": {
+      "title": "A7 – Kontrola a revize údajů",
+      "description": "Ověření správnosti a platnosti údajů uvedených v registrech RS4 a RIÚ4.",
+      "output1": "Aktualizovaný registr staveb (RS4) a registr improvizovaných úkrytů (RIÚ4)."
+    },
+    "form_title": "Tabulka 3-26: Údaje zapisované v rámci kroku A7",
+    "rs25_riu38": "RS_26 / RIÚ_38: Datum poslední kontroly údajů",
+    "rs26_riu39": "RS_27 / RIÚ_39: Nedostatky zjištěné při kontrole",
+    "rs26_riu39_hint": "Uvede se popis zjištěných nedostatků a způsob jejich odstranění.",
+    "rs27_riu40": "RS_28 / RIÚ_40: Schvalovatel",
+    "rs28_riu41": "RS_29 / RIÚ_41: Provedení odborného posouzení",
+    "rs29_riu42": "RS_30 / RIÚ_42: Datum odborného posouzení",
+    "rs28_riu43": "RS_29 / RIÚ_43: Interval revize",
+    "rs28_riu43_hint": "Doporučuje se 1x za 2 roky.",
+    "rs29_riu44": "RS_30 / RIÚ_44: Datum příští revize",
+    "procedure": {
+      "intro": "V případě identifikace prostoru vhodného k vybudování IÚ v této stavbě se provede rovněž příslušná aktualizace registru IÚ (RIÚ4). Cílem tohoto kroku je provedení kontroly údajů v registrech RS4 a RIÚ4 a nastavení termínů revize těchto údajů.",
+      "title": "Postup A7:",
+      "step1": "Kontrola a potvrzení správnosti údajů v registrech RS4 a RIÚ4 schvalovatelem. Při zjištění nedostatků se provede oprava chybných údajů nebo doplnění chybějících údajů v registrech. Informace o datu kontroly a schvalovateli jsou doplněny do registrů.",
+      "step2": "Rozhodnutí o provedení odborného posouzení IÚ dle části B. U staveb a IÚ určených pro odborné posouzení se přidá tato informace do registrů.",
+      "step3": "Stanovení intervalu provádění revize údajů a uvedení data příští revize údajů do registrů. Revizi se doporučuje provádět pravidelně 1x za 2 roky."
+    }
+  },
+  "tabs": {
+    "step1_icon": "mdi-numeric-1-box-outline",
+    "step1_text": "Vymezení území a staveb",
+    "step2_icon": "mdi-numeric-2-box-outline",
+    "step2_text": "Analýza území",
+    "step3_icon": "mdi-numeric-3-box-outline",
+    "step3_text": "Identifikace prostorů",
+    "step4_icon": "mdi-numeric-4-box-outline",
+    "step4_text": "Hodnocení odolnosti",
+    "step5_icon": "mdi-numeric-5-box-outline",
+    "step5_text": "Hodnocení ohroženosti",
+    "step6_icon": "mdi-numeric-6-box-outline",
+    "step6_text": "Celkové hodnocení",
+    "step7_icon": "mdi-numeric-7-box-outline",
+    "step7_text": "Kontrola a revize"
+  },
+    "actions": {
+    "cancel": "Zrušit",
+    "save": "Uložit záznam",
+    "add_shelter": "Přidat další úkryt",
+    "add_assessment": "Přidat posouzení",
+    "save_changes": "Uložit změny",
+    "create_record": "Vytvořit záznam"
+  }
+}

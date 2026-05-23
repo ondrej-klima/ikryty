@@ -1,0 +1,82 @@
+{
+  "wmsOverlayLayers": [
+    {
+      "name": "ČÚZK hranice_parcel_barevne",
+      "visible": false,
+      "layers": "hranice_parcel_barevne",
+      "url": "https://services.cuzk.cz/wms/local-km-wms.asp",
+      "opacity": 1
+    },
+    {
+      "name": "ČÚZK prehledka_kat_uz",
+      "visible": false,
+      "layers": "prehledka_kat_uz",
+      "url": "https://services.cuzk.cz/wms/local-km-wms.asp",
+      "opacity": 1
+    },
+    {
+      "name": "ČÚZK prehledky,KN_I",
+      "visible": false,
+      "layers": "prehledky,KN_I",
+      "url": "https://services.cuzk.cz/wms/wms.asp",
+      "opacity": 1,
+      "maxZoom": 20
+    },
+    {
+      "name": "Záplavová území pětileté vody",
+      "visible": false,
+      "layers": "D01:D01_ZaplUzemi5Vody",
+      "url": "https://civildefense.fit.vutbr.cz/geoserver/gwc/service/wms?&TILES=True",
+      "opacity": 0.5
+    },
+    {
+      "name": "Záplavová území dvacetileté vody",
+      "visible": false,
+      "layers": "D02:D02_ZaplUzemi20Vody",
+      "url": "https://civildefense.fit.vutbr.cz/geoserver/gwc/service/wms?&TILES=True",
+      "opacity": 0.5
+    },
+    {
+      "name": "Záplavová území stoleté vody",
+      "visible": false,
+      "layers": "D03:D03_ZaplUzemi100Vody",
+      "url": "https://civildefense.fit.vutbr.cz/geoserver/gwc/service/wms?&TILES=True",
+      "opacity": 0.5
+    },
+    {
+      "name": "Záplavové území největší zaznamenané přirozené povodně",
+      "visible": false,
+      "layers": "D04_ZaplUzemiNejvPrirozPovodne2",
+      "url": "https://civildefense.fit.vutbr.cz/geoserver/D04/wms",
+      "opacity": 0.5
+    },
+    {
+      "name": "Záplavová území pětisetleté vody",
+      "visible": false,
+      "layers": "D08:D08_ZaplUzemi500Vody",
+      "url": "https://civildefense.fit.vutbr.cz/geoserver/gwc/service/wms?&TILES=True",
+      "opacity": 0.5
+    },
+    {
+      "name": "Mapa havarijního plánování JMK",
+      "visible": false,
+      "layers": "JMK:ZHP_JMK",
+      "url": "https://civildefense.fit.vutbr.cz/geoserver/gwc/service/wms?&TILES=True",
+      "opacity": 0.5
+    },
+    {
+      "name": "Mapa havarijního plánování JMK (vnější)",
+      "visible": false,
+      "layers": "JMK:ZHP_vnejsi_Krovak",
+      "url": "https://civildefense.fit.vutbr.cz/geoserver/gwc/service/wms?&TILES=True",
+      "opacity": 0.5
+    },
+    {
+      "name": "Mapa havarijního plánování JMK (vnitřní)",
+      "visible": false,
+      "layers": "JMK:ZHP_vnitrni_Krovak",
+      "url": "https://civildefense.fit.vutbr.cz/geoserver/gwc/service/wms?&TILES=True",
+      "opacity": 0.5
+    }
+  ]
+}

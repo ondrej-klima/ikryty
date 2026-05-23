@@ -1,0 +1,34 @@
+{
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc", "closure"]
+    },
+    "source": {
+        "include": ["./src"], 
+        "includePattern": "\\.(vue|js)$",
+        "excludePattern": "(node_modules/|docs/)"
+    },
+    "plugins": [
+        "node_modules/jsdoc-vuejs",
+        "plugins/markdown"
+    ],
+    "opts": {
+        "destination": "./docs",
+        "recurse": true
+    },
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false,
+        "search": true,
+        "better-docs": {
+            "name": "Moje Vue Dokumentace",
+            "title": "Dokumentace projektu",
+            "navLinks": [
+                {
+                    "label": "GitHub",
+                    "href": "https://github.com/vas-projekt"
+                }
+            ]
+        }
+    }
+}
