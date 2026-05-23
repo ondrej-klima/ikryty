@@ -467,10 +467,11 @@ const api = {
    * Stáhne Excel export viditelných budov a úkrytů.
    * @public
    * @method exportBuildingsWorkbook
+   * @param {{ building_ids: number[] }} filterPayload - Filtrované ID budov k exportu.
    * @returns {Promise<AxiosResponse<Blob>>} Excel soubor jako blob.
    */
-  exportBuildingsWorkbook() {
-    return axios.get('/buildings/export/xlsx', {
+  exportBuildingsWorkbook(filterPayload) {
+    return axios.post('/buildings/export/xlsx', filterPayload, {
       responseType: 'blob',
     });
   },

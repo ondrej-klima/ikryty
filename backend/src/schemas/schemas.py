@@ -230,3 +230,10 @@ class BuildingSummarySchema(BaseModel):
     gps_lat: Optional[float] = None
     gps_long: Optional[float] = None
     max_s_c: Optional[float] = None
+    total_n_k: int = 0
+    total_n_ks: int = 0
+    total_n_kd: int = 0
+
+
+class BuildingExportFilterSchema(BaseModel):
+    building_ids: List[int] = []

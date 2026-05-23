@@ -322,6 +322,28 @@ async def export_buildings_xlsx(current_user: Dict[str, Any] = Depends(get_curre
         },
     )
 
+
+@router.post(
+    "/buildings/export/xlsx",
+    tags=["Buildings"],
+    summary="Exportovat filtrované budovy a úkryty do Excelu",
+)
+async def export_filtered_buildings_xlsx(
+    export_filter: schemas.BuildingExportFilterSchema,
+    current_user: Dict[str, Any] = Depends(get_current_user),
+):
+    workbook_bytes = await crud.export_visible_buildings_and_shelters(
+        current_user,
+        building_ids=export_filter.building_ids,
+    )
+    return Response(
+        content=workbook_bytes,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={
+            "Content-Disposition": 'attachment; filename="ikryty-export.xlsx"'
+        },
+    )
+
 @router.post("/buildings/{building_id}/ssd_attachments", response_model=schemas.BuildingOutSchema, tags=["Buildings"])
 async def upload_ssd_attachments(
     building_id: int,

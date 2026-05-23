@@ -1,5 +1,5 @@
 # crud.py
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from fastapi import HTTPException
 from pydantic import BaseModel
 from tortoise.exceptions import DoesNotExist, IntegrityError
@@ -19,7 +19,7 @@ from src.schemas import schemas
 from src.database.models import ShelterLocation
 
 import pyproj
-from tortoise.functions import Max
+from tortoise.functions import Max, Sum
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font
 
@@ -167,10 +167,16 @@ def _is_supervisor(current_user: Dict[str, Any]) -> bool:
     return 'supervisor' in current_user.get("realm_access", {}).get("roles", [])
 
 
-def _get_visible_buildings_query(current_user: Dict[str, Any]):
+def _get_visible_buildings_query(current_user: Dict[str, Any], building_ids: Optional[List[int]] = None):
     if _is_supervisor(current_user):
-        return models.Building.all()
-    return models.Building.filter(user_id=current_user.get('preferred_username'))
+        query = models.Building.all()
+    else:
+        query = models.Building.filter(user_id=current_user.get('preferred_username'))
+
+    if building_ids is not None:
+        query = query.filter(id__in=building_ids)
+
+    return query
 
 
 def _parse_field_description(description: str) -> tuple[str, str]:
@@ -228,8 +234,8 @@ def _autosize_columns(worksheet):
 def _build_export_workbook(buildings: List[models.Building]) -> bytes:
     workbook = Workbook()
     buildings_sheet = workbook.active
-    buildings_sheet.title = "Buildings"
-    shelters_sheet = workbook.create_sheet("Shelters")
+    buildings_sheet.title = "Registr staveb"
+    shelters_sheet = workbook.create_sheet("Registr improvizovaných úkrytů")
 
     building_headers = []
     for field_name in BUILDING_EXPORT_FIELDS:
@@ -999,9 +1005,12 @@ async def get_buildings_summary(current_user: Dict[str, Any]) -> List[schemas.Bu
 
     # 1. The database query is correct.
     buildings_data = await _get_visible_buildings_query(current_user).annotate(
-        max_s_c=Max("shelters__s_c")
+        max_s_c=Max("shelters__s_c"),
+        total_n_k=Sum("shelters__capacity_short"),
+        total_n_ks=Sum("shelters__capacity_medium"),
+        total_n_kd=Sum("shelters__capacity_long"),
     ).values(
-        "id", "building_code", "user_id", "name_address", "gps_lat", "gps_long", "max_s_c"
+        "id", "building_code", "user_id", "name_address", "gps_lat", "gps_long", "max_s_c", "total_n_k", "total_n_ks", "total_n_kd"
     )
 
     if not buildings_data:
@@ -1031,6 +1040,10 @@ async def get_buildings_summary(current_user: Dict[str, Any]) -> List[schemas.Bu
         if gps_long is not None:
             gps_long = float(gps_long)
 
+        total_n_k = int(building_dict.get("total_n_k") or 0)
+        total_n_ks = int(building_dict.get("total_n_ks") or 0)
+        total_n_kd = int(building_dict.get("total_n_kd") or 0)
+
         # 3. Manually construct the Pydantic object
         try:
             summary_obj = schemas.BuildingSummarySchema(
@@ -1040,7 +1053,10 @@ async def get_buildings_summary(current_user: Dict[str, Any]) -> List[schemas.Bu
                 name_address=str(building_dict["name_address"]),
                 gps_lat=gps_lat,
                 gps_long=gps_long,
-                max_s_c=max_s_c
+                max_s_c=max_s_c,
+                total_n_k=total_n_k,
+                total_n_ks=total_n_ks,
+                total_n_kd=total_n_kd,
             )
             results.append(summary_obj)
         except Exception as pydantic_error:
@@ -1051,6 +1067,6 @@ async def get_buildings_summary(current_user: Dict[str, Any]) -> List[schemas.Bu
     return results
 
 
-async def export_visible_buildings_and_shelters(current_user: Dict[str, Any]) -> bytes:
-    buildings = await _get_visible_buildings_query(current_user).prefetch_related("shelters")
+async def export_visible_buildings_and_shelters(current_user: Dict[str, Any], building_ids: Optional[List[int]] = None) -> bytes:
+    buildings = await _get_visible_buildings_query(current_user, building_ids=building_ids).prefetch_related("shelters")
     return _build_export_workbook(buildings)

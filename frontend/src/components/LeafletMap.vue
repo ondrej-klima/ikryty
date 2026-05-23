@@ -1,5 +1,16 @@
 <template>
 	<div class="map">
+		<div ref="mapSearch" class="map-search">
+			<v-text-field
+				v-model="searchQuery"
+				prepend-inner-icon="mdi-magnify"
+				clearable
+				density="compact"
+				variant="solo"
+				hide-details
+				label="Filtrovat podle adresy"
+			/>
+		</div>
 		<l-map ref="map" :zoom="zoom" :center="[49.2265592, 16.5957531]" :options="mapOptions" @ready="addControls">
 			<l-control-layers position="topright"></l-control-layers>
 			<l-tile-layer
@@ -39,11 +50,11 @@
 			/>
 			<l-control-scale position="bottomleft" :imperial="false" :metric="true"></l-control-scale>
 			<l-geo-json
-				:geojson="geojson"
+				:geojson="filteredGeojson"
 				:options="options"
 			/>
 			<l-geo-json
-				:geojson="targetGeojson"
+				:geojson="filteredTargetGeojson"
 				:options="targetOptions"
 			/>
 			
@@ -120,6 +131,7 @@ import MainMenu from "@/components/MainMenu.vue";
 import ProjectCredits from "@/components/ProjectCredits.vue";
 import {useShelterStore} from "@/stores/shelterStore";
 import {useTargetStore} from "@/stores/targetStore";
+import {useSearchStore} from "@/stores/searchStore";
 import addShelterDialog from "@/components/addShelterDialog.vue";
 import addTargetDialog from "./addTargetDialog.vue";
 import DeleteShelterDialog from "@/components/DeleteShelterDialog.vue";
@@ -162,8 +174,6 @@ export default {
 				show: false,
 				text: null,
 			},
-			geojson: null,
-			targetGeojson: null,
 			geosearchLocation: null,
 			tooltipData: {
 				title: null,
@@ -300,6 +310,35 @@ export default {
 		};
 	},
 	computed: {
+		searchQuery: {
+			get() {
+				return useSearchStore().searchQuery
+			},
+			set(value) {
+				useSearchStore().setSearchQuery(value)
+			}
+		},
+		filteredGeojson() {
+			const shelterStore = useShelterStore()
+			const filteredIds = new Set(useSearchStore().filteredBuildingIds)
+			const geojson = shelterStore.sheltersGeoJSON
+
+			return {
+				...geojson,
+				features: geojson.features.filter((feature) => filteredIds.has(feature.id))
+			}
+		},
+		filteredTargetGeojson() {
+			const targetStore = useTargetStore()
+			const filteredTargets = useSearchStore().filteredTargets
+			const filteredIds = new Set(filteredTargets.map((target) => target.id))
+			const geojson = targetStore.targetsGeoJSON
+
+			return {
+				...geojson,
+				features: geojson.features.filter((feature) => filteredIds.has(feature.id))
+			}
+		},
         /**
          * Konfigurace pro GeoJSON vrstvu Úkrytů (Shelters).
          * Dynamicky mění barvu markeru podle stavu úkrytu (property `SC`).
@@ -410,6 +449,8 @@ export default {
 		addControls() {
 			this.$nextTick(async() => {
 				this.map = this.$refs.map.leafletObject
+				L.DomEvent.disableClickPropagation(this.$refs.mapSearch)
+				L.DomEvent.disableScrollPropagation(this.$refs.mapSearch)
 
 				let sidebar = L.control.sidebar('sidebar', {
 				position: 'left',
@@ -489,14 +530,6 @@ export default {
     let shelterStore = useShelterStore()
 	let targetStore = useTargetStore()
 
-    shelterStore.$subscribe(() => {
-      this.$data.geojson = shelterStore.sheltersGeoJSON
-    })
-
-	targetStore.$subscribe(() => {
-		this.$data.targetGeojson = targetStore.targetsGeoJSON
-	})
-
     await shelterStore.getUserShelters()
 	await targetStore.getUserTargets()
   },
@@ -508,6 +541,16 @@ export default {
 .map {
 	height: 100%;
 	width: 100%;
+	position: relative;
+}
+
+.map-search {
+	position: absolute;
+	top: 12px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: min(420px, calc(100% - 24px));
+	z-index: 1000;
 }
 
 #tooltip {
