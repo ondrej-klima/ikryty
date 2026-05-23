@@ -292,7 +292,7 @@ export default {
 		}
 	},
   methods: {
-	    /**
+    /**
      * Nastaví dialog do režimu editace existující budovy (pro testovací účely).
      * @public
      * @method selectExistingBuilding
@@ -303,7 +303,7 @@ export default {
       this.newGpsLng = null;
     },
 
-	    /**
+    /**
      * Nastaví dialog do režimu vytváření nové budovy (pro testovací účely).
      * @public
      * @method selectNewLocation
@@ -314,7 +314,7 @@ export default {
       this.newGpsLng = 16.6068;
     },
 
-	    /**
+    /**
      * Callback funkce volaná z A1Form po úspěšném vytvoření nové budovy.
      * Uloží ID nové budovy, čímž odemkne ostatní záložky.
      * 
@@ -329,7 +329,7 @@ export default {
       await useShelterStore().getUserShelters();
     },
 
-	    /**
+    /**
      * Callback funkce volaná z pod-formulářů po úspěšné aktualizaci dat.
      * Slouží primárně pro logování nebo zobrazení globální notifikace.
      * 
@@ -342,7 +342,7 @@ export default {
       console.log(`Budova s ID: ${updatedId} byla aktualizována.`)
     },
 
-	    /**
+    /**
      * Hlavní metoda pro otevření dialogu.
      * Nastaví stav dialogu podle předaných parametrů (Create vs Edit).
      * Pokud je předáno `coords.id`, načte data pro editaci.
@@ -434,7 +434,7 @@ export default {
       this.$data.show = true
     },
 
-	    /**
+    /**
      * Metoda pro odeslání starého formuláře (submit).
      * V novém designu je tato logika přesunuta do jednotlivých pod-komponent (A1-A7),
      * ale zde zůstává pro případné uložení celkového kontextu.
@@ -461,7 +461,7 @@ export default {
      * @returns {string} The CSS class(es) to apply.
      */
 
-	     /**
+    /**
      * Pomocná funkce pro styling buněk v tabulkách nápovědy.
      * Vrací CSS třídu na základě hodnoty buňky (např. barva podle skóre).
      * 
@@ -495,7 +495,7 @@ export default {
       return 'bg-default';
     },
 
-	    /**
+    /**
      * Formátuje číselnou hodnotu skóre SOV (2 desetinná místa, čárka).
      * @param {number} value - Hodnota skóre.
      * @returns {string} Formátovaný řetězec.

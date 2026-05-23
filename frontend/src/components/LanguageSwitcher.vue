@@ -82,7 +82,7 @@ export default {
 			type: Array,
 			required: true
 		},
-	     /**
+    /**
          * ID aktuálně vybraného jazyka (např. 'cs', 'en').
          */
 		currentLanguage: {
@@ -98,7 +98,7 @@ export default {
 		}
 	},
 	computed: {
-	     /**
+    /**
          * Vrací URL obrázku vlajky pro aktuálně zvolený jazyk.
          * Vyhledá odpovídající objekt v poli `languages` podle `currentLanguage`.
          * @type {string|null}

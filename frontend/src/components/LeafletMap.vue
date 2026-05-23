@@ -337,7 +337,7 @@ export default {
 			};
 		},
 
-	     /**
+    /**
          * Funkce aplikovaná na každý feature (úkryt) v GeoJSON vrstvě.
          * Připojuje tooltip a kontextové menu pro editaci/mazání.
          * @type {Function}
