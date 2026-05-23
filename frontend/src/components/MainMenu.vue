@@ -4,6 +4,18 @@
         color="primary"
     >
       <v-toolbar-title>{{ $t("menu.mainMenu") }}</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn
+          :loading="isExporting"
+          :disabled="isExporting"
+          variant="tonal"
+          color="white"
+          prepend-icon="mdi-microsoft-excel"
+          class="mr-2"
+          @click="downloadExport"
+      >
+        {{ $t("menu.exportExcel") }}
+      </v-btn>
     </v-toolbar>
     <div class="d-flex flex-row">
       <v-tabs
@@ -66,6 +78,7 @@
 
 import { useShelterStore } from '@/stores/shelterStore';
 import { useTargetStore } from '@/stores/targetStore';
+import api from '@/services/api';
 
 
 export default {
@@ -73,6 +86,7 @@ export default {
   data() {
     return {
       tab: 'option-1',
+      isExporting: false,
       shelterHeaders: [
         {key:'id',title:'ID'},
         {key:'user_id',title:'Uživatel'},
@@ -111,6 +125,29 @@ export default {
       if(useTargetStore().$state.targets !== null)
         return useTargetStore()?.$state?.targets
       return [{}]
+    }
+  },
+  methods: {
+    async downloadExport() {
+      this.isExporting = true
+      try {
+        const response = await api.exportBuildingsWorkbook()
+        const blobUrl = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        const disposition = response.headers?.['content-disposition'] || ''
+        const filenameMatch = disposition.match(/filename="?([^"]+)"?/i)
+
+        link.href = blobUrl
+        link.download = filenameMatch?.[1] || 'ikryty-export.xlsx'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        window.URL.revokeObjectURL(blobUrl)
+      } catch (error) {
+        console.error('Workbook export failed', error)
+      } finally {
+        this.isExporting = false
+      }
     }
   }
 }

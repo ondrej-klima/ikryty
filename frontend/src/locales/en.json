@@ -52,7 +52,8 @@
     "hideMenu": "Hide Objects Overview",
     "mainMenu": "Objects Overview",
     "shelters": "Shelters",
-    "targets": "Targets"
+    "targets": "Targets",
+    "exportExcel": "Export to Excel"
   },
   "geolocation": {
     "showMe": "Show me where I am, yo!"

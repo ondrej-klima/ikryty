@@ -19,7 +19,8 @@
   "menu": {
     "showMenu": "メニューを表示",
     "hideMenu": "メニューを隠す",
-    "mainMenu": "メインメニュー"
+    "mainMenu": "メインメニュー",
+    "exportExcel": "Excel にエクスポート"
   },
   "geolocation": {
     "showMe": "私がどこにいるのか見せてください"

@@ -52,7 +52,8 @@
     "hideMenu": "Skrýt přehled objektů",
     "mainMenu": "Přehled objektů",
     "shelters": "Budovy",
-    "targets": "Terče"
+    "targets": "Terče",
+    "exportExcel": "Export do Excelu"
   },
   "geolocation": {
     "showMe": "Ukaž mi moji polohu"

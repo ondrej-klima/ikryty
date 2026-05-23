@@ -11,6 +11,7 @@ import aiofiles
 from pathlib import Path
 from fastapi import UploadFile
 from decimal import Decimal
+from io import BytesIO
 
 # Assuming your folder structure is src/crud/crud.py, src/database/models.py etc.
 from src.database import models
@@ -19,6 +20,8 @@ from src.database.models import ShelterLocation
 
 import pyproj
 from tortoise.functions import Max
+from openpyxl import Workbook
+from openpyxl.styles import Alignment, Font
 
 """
 Modul pro databázové operace a aplikační logiku.
@@ -62,6 +65,79 @@ logger = logging.getLogger(__name__)
 UPLOADS_DIR = Path("uploads")
 UPLOADS_DIR.mkdir(exist_ok=True)
 
+BUILDING_EXPORT_FIELDS = [
+    "building_code",
+    "name_address",
+    "gps_lat",
+    "gps_long",
+    "owner",
+    "administrator",
+    "access_restricted",
+    "operation_type",
+    "object_type",
+    "has_underground",
+    "has_basement",
+    "has_inner_wing",
+    "construction_limits",
+    "data_source",
+    "created_date",
+    "responsible_person",
+    "risk_area",
+    "risk_justification",
+    "deficiency",
+    "deficiency_justification",
+    "wall_material",
+    "wall_thickness",
+    "s_ok",
+    "s_sd",
+    "s_sd_attachment",
+    "s_is",
+    "s_is_attachment",
+    "possible_t_upravy_building",
+    "last_control_date",
+    "control_deficiencies",
+    "approver",
+    "assessment_status",
+    "assessment_date",
+    "review_interval",
+    "next_review_date",
+]
+
+SHELTER_EXPORT_FIELDS = [
+    ("building.building_code", "RS_1", "Identifikační kód stavby"),
+    ("building.name_address", "RS_2", "Název / adresa stavby"),
+    ("building.gps_lat", "RS_3", "GPS souřadnice (šířka, WGS-84)"),
+    ("building.gps_long", "RS_3", "GPS souřadnice (délka, WGS-84)"),
+    ("shelter_code", None, None),
+    ("location", None, None),
+    ("schema_path", None, None),
+    ("photo_paths", None, None),
+    ("area", None, None),
+    ("height", None, None),
+    ("obstacles_volume", None, None),
+    ("usable_volume", None, None),
+    ("capacity_short", None, None),
+    ("capacity_medium", None, None),
+    ("capacity_long", None, None),
+    ("expected_persons", None, None),
+    ("ventilation", None, None),
+    ("emergency_exits", None, None),
+    ("power_supply", None, None),
+    ("energy_cutoff", None, None),
+    ("chuc_type", None, None),
+    ("chuc_length", None, None),
+    ("chuc_ventilation", None, None),
+    ("chuc_walls", None, None),
+    ("s_pu", None, None),
+    ("s_chuc", None, None),
+    ("s_ov", None, None),
+    ("distance_to_target", None, None),
+    ("s_o", None, None),
+    ("s_c", None, None),
+    ("iu_class", None, None),
+    ("assessment_needed", None, None),
+]
+
 
 # ==============================================================================
 # AUTHORIZATION & HELPER FUNCTIONS
@@ -85,6 +161,111 @@ def _check_permission(db_object_user_id: str, current_user: Dict[str, Any]):
     roles = current_user.get("realm_access", {}).get("roles", [])
     if not (db_object_user_id == username or 'supervisor' in roles):
         raise HTTPException(status_code=403, detail="Not authorized to perform this action")
+
+
+def _is_supervisor(current_user: Dict[str, Any]) -> bool:
+    return 'supervisor' in current_user.get("realm_access", {}).get("roles", [])
+
+
+def _get_visible_buildings_query(current_user: Dict[str, Any]):
+    if _is_supervisor(current_user):
+        return models.Building.all()
+    return models.Building.filter(user_id=current_user.get('preferred_username'))
+
+
+def _parse_field_description(description: str) -> tuple[str, str]:
+    if not description:
+        return "", ""
+
+    abbreviation, separator, caption = description.partition(":")
+    if not separator:
+        return "", description.strip()
+    return abbreviation.strip(), caption.strip()
+
+
+def _format_export_value(value: Any) -> Any:
+    if isinstance(value, Decimal):
+        return float(value)
+    if isinstance(value, list):
+        return "; ".join(str(item) for item in value)
+    if isinstance(value, bool):
+        return "ANO" if value else "NE"
+    if hasattr(value, "value"):
+        return value.value
+    if value is None:
+        return ""
+    return value
+
+
+def _resolve_attr(source: Any, path: str) -> Any:
+    value = source
+    for part in path.split("."):
+        value = getattr(value, part, None)
+        if value is None:
+            return None
+    return value
+
+
+def _set_sheet_headers(worksheet, header_rows: List[tuple[str, str]]):
+    for column_index, (caption, abbreviation) in enumerate(header_rows, start=1):
+        caption_cell = worksheet.cell(row=1, column=column_index, value=caption)
+        abbreviation_cell = worksheet.cell(row=2, column=column_index, value=abbreviation)
+        caption_cell.font = Font(bold=True)
+        abbreviation_cell.font = Font(bold=True)
+        caption_cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+        abbreviation_cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+
+def _autosize_columns(worksheet):
+    for column in worksheet.columns:
+        values = [cell.value for cell in column if cell.value is not None]
+        if not values:
+            continue
+        width = min(max(len(str(value)) for value in values) + 2, 60)
+        worksheet.column_dimensions[column[0].column_letter].width = width
+
+
+def _build_export_workbook(buildings: List[models.Building]) -> bytes:
+    workbook = Workbook()
+    buildings_sheet = workbook.active
+    buildings_sheet.title = "Buildings"
+    shelters_sheet = workbook.create_sheet("Shelters")
+
+    building_headers = []
+    for field_name in BUILDING_EXPORT_FIELDS:
+        abbreviation, caption = _parse_field_description(models.Building._meta.fields_map[field_name].description)
+        building_headers.append((caption, abbreviation))
+    _set_sheet_headers(buildings_sheet, building_headers)
+
+    shelter_headers = []
+    for field_name, abbreviation, caption in SHELTER_EXPORT_FIELDS:
+        if abbreviation is None or caption is None:
+            abbreviation, caption = _parse_field_description(models.Shelter._meta.fields_map[field_name].description)
+        shelter_headers.append((caption, abbreviation))
+    _set_sheet_headers(shelters_sheet, shelter_headers)
+
+    for building in buildings:
+        buildings_sheet.append([
+            _format_export_value(getattr(building, field_name, None))
+            for field_name in BUILDING_EXPORT_FIELDS
+        ])
+
+        for shelter in building.shelters:
+            shelter_row = []
+            for field_name, _, _ in SHELTER_EXPORT_FIELDS:
+                source = building if field_name.startswith("building.") else shelter
+                path = field_name.removeprefix("building.")
+                shelter_row.append(_format_export_value(_resolve_attr(source, path)))
+            shelters_sheet.append(shelter_row)
+
+    buildings_sheet.freeze_panes = "A3"
+    shelters_sheet.freeze_panes = "A3"
+    _autosize_columns(buildings_sheet)
+    _autosize_columns(shelters_sheet)
+
+    output = BytesIO()
+    workbook.save(output)
+    return output.getvalue()
 
 
 async def _recalculate_shelter_values(shelter: models.Shelter):
@@ -817,7 +998,7 @@ async def get_buildings_summary(current_user: Dict[str, Any]) -> List[schemas.Bu
     print("\n--- RUNNING get_buildings_summary ---")
 
     # 1. The database query is correct.
-    buildings_data = await models.Building.all().annotate(
+    buildings_data = await _get_visible_buildings_query(current_user).annotate(
         max_s_c=Max("shelters__s_c")
     ).values(
         "id", "building_code", "user_id", "name_address", "gps_lat", "gps_long", "max_s_c"
@@ -837,9 +1018,6 @@ async def get_buildings_summary(current_user: Dict[str, Any]) -> List[schemas.Bu
 
     results = []
     for building_dict in buildings_data:
-        if building_dict.get("user_id") != current_user.get('preferred_username') and not ('supervisor' in current_user.get("realm_access", {}).get("roles", [])):
-            continue
-
         # 2. DEFENSIVE TYPE CONVERSION
         max_s_c = building_dict.get("max_s_c")
         if isinstance(max_s_c, Decimal):
@@ -871,3 +1049,8 @@ async def get_buildings_summary(current_user: Dict[str, Any]) -> List[schemas.Bu
             raise HTTPException(status_code=500, detail="Internal server error during data processing.")
 
     return results
+
+
+async def export_visible_buildings_and_shelters(current_user: Dict[str, Any]) -> bytes:
+    buildings = await _get_visible_buildings_query(current_user).prefetch_related("shelters")
+    return _build_export_workbook(buildings)

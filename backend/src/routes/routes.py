@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import Response
 from typing import List, Dict, Any
 
 # Importujte schémata, CRUD funkce a autentizační závislost
@@ -304,6 +305,22 @@ async def get_buildings_summary(current_user: Dict[str, Any] = Depends(get_curre
     ze všech svých přiřazených úkrytů.
     """
     return await crud.get_buildings_summary(current_user)
+
+
+@router.get(
+    "/buildings/export/xlsx",
+    tags=["Buildings"],
+    summary="Exportovat viditelné budovy a úkryty do Excelu",
+)
+async def export_buildings_xlsx(current_user: Dict[str, Any] = Depends(get_current_user)):
+    workbook_bytes = await crud.export_visible_buildings_and_shelters(current_user)
+    return Response(
+        content=workbook_bytes,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={
+            "Content-Disposition": 'attachment; filename="ikryty-export.xlsx"'
+        },
+    )
 
 @router.post("/buildings/{building_id}/ssd_attachments", response_model=schemas.BuildingOutSchema, tags=["Buildings"])
 async def upload_ssd_attachments(

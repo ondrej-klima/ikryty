@@ -462,6 +462,18 @@ const api = {
   getBuildingsSummary() {
     return axios.get('/buildings/summary');
   },
+
+  /**
+   * Stáhne Excel export viditelných budov a úkrytů.
+   * @public
+   * @method exportBuildingsWorkbook
+   * @returns {Promise<AxiosResponse<Blob>>} Excel soubor jako blob.
+   */
+  exportBuildingsWorkbook() {
+    return axios.get('/buildings/export/xlsx', {
+      responseType: 'blob',
+    });
+  },
 };
 
 export default api;
