@@ -53,6 +53,16 @@
     "mainMenu": "Objects Overview",
     "shelters": "Shelters",
     "targets": "Targets",
+    "buildingDetails": "Building Details",
+    "selectedBuilding": "Selected Building",
+    "noBuildingSelected": "Click a building marker on the map to view its details.",
+    "buildingCode": "Building Code",
+    "user": "User",
+    "score": "S_C",
+    "capacityShort": "N_K",
+    "capacityMedium": "N_KS",
+    "capacityLong": "N_KD",
+    "coordinates": "Coordinates",
     "exportExcel": "Export to Excel"
   },
   "geolocation": {

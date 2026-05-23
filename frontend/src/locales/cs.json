@@ -53,6 +53,16 @@
     "mainMenu": "Přehled objektů",
     "shelters": "Budovy",
     "targets": "Terče",
+    "buildingDetails": "Detail budovy",
+    "selectedBuilding": "Vybraná budova",
+    "noBuildingSelected": "Kliknutím na marker budovy v mapě zobrazíte její detail.",
+    "buildingCode": "Kód budovy",
+    "user": "Uživatel",
+    "score": "S_C",
+    "capacityShort": "N_K",
+    "capacityMedium": "N_KS",
+    "capacityLong": "N_KD",
+    "coordinates": "Souřadnice",
     "exportExcel": "Export do Excelu"
   },
   "geolocation": {

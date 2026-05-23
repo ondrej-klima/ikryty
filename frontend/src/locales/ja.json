@@ -20,6 +20,18 @@
     "showMenu": "メニューを表示",
     "hideMenu": "メニューを隠す",
     "mainMenu": "メインメニュー",
+    "shelters": "建物",
+    "targets": "ターゲット",
+    "buildingDetails": "建物の詳細",
+    "selectedBuilding": "選択した建物",
+    "noBuildingSelected": "地図上の建物マーカーをクリックすると詳細が表示されます。",
+    "buildingCode": "建物コード",
+    "user": "ユーザー",
+    "score": "S_C",
+    "capacityShort": "N_K",
+    "capacityMedium": "N_KS",
+    "capacityLong": "N_KD",
+    "coordinates": "座標",
     "exportExcel": "Excel にエクスポート"
   },
   "geolocation": {

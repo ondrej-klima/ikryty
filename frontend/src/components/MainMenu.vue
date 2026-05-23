@@ -60,12 +60,22 @@
           </v-icon>
           {{ $t("menu.targets") }}
         </v-tab>
+        <v-tab value="option-3">
+          <v-icon start>
+            mdi-information-outline
+          </v-icon>
+          {{ $t("menu.buildingDetails") }}
+        </v-tab>
       </v-tabs>
       <v-window v-model="tab">
         <v-window-item value="option-1">
           <v-card flat>
             <v-card-text>
-              <v-data-table :items="items" :headers="shelterHeaders"></v-data-table>
+              <v-data-table
+                :items="items"
+                :headers="shelterHeaders"
+                :row-props="getShelterRowProps"
+              ></v-data-table>
             </v-card-text>
           </v-card>
         </v-window-item>
@@ -73,6 +83,26 @@
           <v-card flat>
             <v-card-text>
               <v-data-table :items="targetItems" :headers="targetHeaders"></v-data-table>
+            </v-card-text>
+          </v-card>
+        </v-window-item>
+        <v-window-item value="option-3">
+          <v-card flat>
+            <v-card-text>
+              <div v-if="selectedBuilding" class="building-details">
+                <div class="building-details__title">{{ $t("menu.selectedBuilding") }}</div>
+                <table class="building-details__table">
+                  <tbody>
+                    <tr v-for="entry in selectedBuildingEntries" :key="entry.key">
+                      <th scope="row">{{ entry.label }}</th>
+                      <td>{{ entry.value }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div v-else class="building-details__empty">
+                {{ $t("menu.noBuildingSelected") }}
+              </div>
             </v-card-text>
           </v-card>
         </v-window-item>
@@ -142,11 +172,75 @@ export default {
     targetItems() {
       return useSearchStore().filteredTargets
     },
+    selectedBuildingId() {
+      return useSearchStore().selectedBuildingId
+    },
+    selectedBuilding() {
+      return useSearchStore().selectedBuilding
+    },
+    selectedBuildingEntries() {
+      if (!this.selectedBuilding) {
+        return []
+      }
+
+      const fieldLabels = {
+        id: 'ID',
+        building_code: this.$t('menu.buildingCode'),
+        user_id: this.$t('menu.user'),
+        name_address: this.$t('shelter.shelterAddress'),
+        max_s_c: this.$t('menu.score'),
+        total_n_k: this.$t('menu.capacityShort'),
+        total_n_ks: this.$t('menu.capacityMedium'),
+        total_n_kd: this.$t('menu.capacityLong'),
+        gps_lat: `${this.$t('menu.coordinates')} LAT`,
+        gps_long: `${this.$t('menu.coordinates')} LNG`
+      }
+
+      return Object.entries(this.selectedBuilding)
+        .filter(([, value]) => value !== null && value !== undefined && value !== '')
+        .map(([key, value]) => ({
+          key,
+          label: fieldLabels[key] || key,
+          value: this.formatBuildingEntryValue(key, value)
+        }))
+    },
     visibleCapacityTotals() {
       return useSearchStore().visibleCapacityTotals
     }
   },
+  watch: {
+    selectedBuilding(value) {
+      if (value) {
+        this.tab = 'option-3'
+      }
+    }
+  },
   methods: {
+    getShelterRowProps({ item }) {
+      const building = item?.raw || item
+      const isSelected = building?.id === this.selectedBuildingId
+
+      return {
+        class: isSelected ? 'main-menu__row--selected' : '',
+        onClick: () => {
+          if (building?.id != null) {
+            useSearchStore().setSelectedBuildingId(building.id)
+            this.tab = 'option-3'
+          }
+        }
+      }
+    },
+    formatBuildingEntryValue(key, value) {
+      if (['gps_lat', 'gps_long'].includes(key)) {
+        return Number(value).toFixed(6)
+      }
+
+      if (key === 'max_s_c') {
+        return Number(value).toFixed(2)
+      }
+
+      return value
+    },
     async downloadExport() {
       this.isExporting = true
       try {
@@ -219,5 +313,70 @@ export default {
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   color: rgba(15, 23, 42, 0.82);
+}
+
+.building-details {
+  display: grid;
+  gap: 10px;
+}
+
+.building-details__title {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.building-details__empty {
+  padding: 20px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.04);
+  color: rgba(15, 23, 42, 0.72);
+}
+
+.building-details__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.building-details__table th,
+.building-details__table td {
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.building-details__table th {
+  width: 36%;
+  font-weight: 600;
+  color: rgba(15, 23, 42, 0.76);
+}
+
+.building-details__table td {
+  color: rgba(15, 23, 42, 0.88);
+  word-break: break-word;
+}
+
+.v-data-table :deep(.main-menu__row--selected) {
+  background: rgba(245, 124, 0, 0.12);
+}
+
+.v-data-table :deep(.main-menu__row--selected:hover) {
+  background: rgba(245, 124, 0, 0.18);
+}
+
+@media (max-width: 960px) {
+  .capacity-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .building-details__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .building-details__table th,
+  .building-details__table td {
+    display: block;
+    width: 100%;
+  }
 }
 </style>

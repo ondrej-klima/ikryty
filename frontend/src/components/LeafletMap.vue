@@ -50,6 +50,7 @@
 			/>
 			<l-control-scale position="bottomleft" :imperial="false" :metric="true"></l-control-scale>
 			<l-geo-json
+				:key="`shelters-${selectedBuildingId ?? 'none'}`"
 				:geojson="filteredGeojson"
 				:options="options"
 			/>
@@ -179,6 +180,7 @@ export default {
 				title: null,
 				id: null
 			},
+			sidebar: null,
 			zoom: 13,
 			baseLayers: baseLayers.baseLayers,
 			wmsBaseLayers: wmsBaseLayers.wmsBaseLayers,
@@ -310,6 +312,9 @@ export default {
 		};
 	},
 	computed: {
+		selectedBuildingId() {
+			return useSearchStore().selectedBuildingId
+		},
 		searchQuery: {
 			get() {
 				return useSearchStore().searchQuery
@@ -348,30 +353,9 @@ export default {
 			return {
 				onEachFeature: this.onEachFeatureFunction,
 				pointToLayer: (feature, latlng) => {
-					let color = 'green'; // Default color
-
-					//console.log('Hello world!')
-					//console.log(feature.properties.SC)
-					//console.log(feature.properties)
-
-					if (feature.properties.SC == null) {
-						color = 'yellow';
-					}
-					else if (feature.properties.SC < 1) {
-						color = 'blue';
-					}
-
-
-					// This part of the code remains the same.
-					// The plugin attaches itself to the global L object as L.ExtraMarkers
-					const extraMarkerIcon = L.ExtraMarkers.icon({
-						icon: 'fa-home', // Example icon (requires Font Awesome)
-						markerColor: color, // 'red', 'orange', 'yellow', 'green', 'blue', 'purple', 'violet', 'pink', 'cyan'
-						shape: 'circle',
-						prefix: 'fa'
+					return L.marker(latlng, {
+						icon: this.createShelterMarkerIcon(feature)
 					});
-					
-					return L.marker(latlng, { icon: extraMarkerIcon });
 				}
 			};
 		},
@@ -383,6 +367,11 @@ export default {
          */
 		onEachFeatureFunction() {
 			return (feature, layer) => {
+				layer.on('click', () => {
+					useSearchStore().setSelectedBuildingId(feature.id)
+					this.sidebar?.show()
+				})
+
 				layer.bindTooltip(feature.properties.name || feature.properties.address|| 'Úkryt ' + feature.id)/*,
 					layer.bindPopup(() => {
 						this.$data.tooltipData = {
@@ -437,6 +426,27 @@ export default {
 	},
 
 	methods: {
+		getShelterMarkerColor(feature) {
+			if (feature.properties.SC == null) {
+				return 'yellow'
+			}
+
+			if (feature.properties.SC < 1) {
+				return 'blue'
+			}
+
+			return 'green'
+		},
+		createShelterMarkerIcon(feature) {
+			const isSelected = feature.id === this.selectedBuildingId
+			return L.ExtraMarkers.icon({
+				icon: 'fa-home',
+				markerColor: this.getShelterMarkerColor(feature),
+				shape: isSelected ? 'star' : 'circle',
+				prefix: 'fa',
+				extraClasses: isSelected ? 'is-selected-shelter-marker' : ''
+			})
+		},
 		/**
          * Inicializuje ovládací prvky mapy po jejím načtení.
          * Přidává Sidebar, EasyButton pro menu, GeoSearch, LocateControl a další panely.
@@ -459,6 +469,7 @@ export default {
 				})
 
 				sidebar.addTo(this.map)
+				this.sidebar = sidebar
 
 				// https://www.npmjs.com/package/leaflet-easybutton
 				L.easyButton({
@@ -542,6 +553,10 @@ export default {
 	height: 100%;
 	width: 100%;
 	position: relative;
+}
+
+.is-selected-shelter-marker {
+	filter: drop-shadow(0 0 8px rgba(15, 23, 42, 0.35));
 }
 
 .map-search {
