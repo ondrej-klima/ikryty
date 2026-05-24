@@ -427,6 +427,12 @@ export default {
      * @type {Number|null}
      */
     gpsLng: { type: Number, default: null },
+    /**
+     * @brief Počáteční hodnota pro RS_2.
+     * @details Použito pro předvyplnění pole název/adresa při vytvoření nové budovy z GeoSearch výsledku.
+     * @type {String|null}
+     */
+    prefillNameAddress: { type: String, default: null },
   },
   data() {
     return {
@@ -484,6 +490,7 @@ export default {
       this.formData = getInitialFormData();
       this.formData.responsible_person = this.$keycloak?.tokenParsed?.name || 'Guest';
       if (!this.isEditMode) {
+        this.formData.name_address = this.prefillNameAddress || '';
         this.formData.gps_lat = this.gpsLat;
         this.formData.gps_long = this.gpsLng;
       }

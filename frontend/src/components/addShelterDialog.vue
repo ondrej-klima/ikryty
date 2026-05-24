@@ -93,9 +93,11 @@
 
       <v-tabs-window v-model="tab">
 		<A1Form       
+			:key="`a1-${formSessionKey}-${selectedBuildingId ?? 'new'}`"
             :building-id="selectedBuildingId"
             :gps-lat="newGpsLat"
             :gps-lng="newGpsLng"
+			:prefill-name-address="newGpsAddress"
             @building-created="handleCreation"
             @building-updated="handleUpdate"
 		/>
@@ -197,6 +199,8 @@ export default {
       selectedBuildingId: null,
       newGpsLat: null,
       newGpsLng: null,
+			newGpsAddress: null,
+			formSessionKey: 0,
       show: false,
       tab: 'option-1',
 			dragPointerId: null,
@@ -488,9 +492,13 @@ export default {
      */
     async showDialog(coords) {
 			this.$data.tab = "building-info-form";
+			this.$data.formSessionKey += 1
 			if(coords.id) {
 				this.$data.selectedBuildingId = coords.id
 				this.$data.shelter_id = coords.id
+				this.$data.newGpsLat = null
+				this.$data.newGpsLng = null
+				this.$data.newGpsAddress = null
 				/*
 				let info = useShelterStore().$state.shelters.find(t => t.id == coords.id)
 				this.$data.user = info.user
@@ -532,6 +540,7 @@ export default {
 				this.$data.selectedBuildingId = null
 				this.$data.newGpsLat = coords.lat
 				this.$data.newGpsLng = coords.lng
+				this.$data.newGpsAddress = coords.label ? coords.label.toString() : null
 
 				/*
 				this.$data.shelter_id = null

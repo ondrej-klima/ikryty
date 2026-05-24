@@ -178,6 +178,7 @@ export default {
 				text: null,
 			},
 			geosearchLocation: null,
+			geosearchQuery: '',
 			tooltipData: {
 				title: null,
 				id: null
@@ -201,15 +202,9 @@ export default {
 					{
 						text: 'Přidat stavbu podle adresy..',
 						callback: async () => {
-							//console.log(this.$data.geosearchLocation)
-							if(this.$data.geosearchLocation != null) {							
-								this.$data.geosearchLocation.lng = this.$data.geosearchLocation.x
-								this.$data.geosearchLocation.lat = this.$data.geosearchLocation.y
-								await this.$refs.addShelter.showDialog(this.$data.geosearchLocation)
-								await this.$refs.addShelter.showDialog(this.$data.geosearchLocation)
-								this.$refs.addShelter.$forceUpdate()
-								await this.$refs.addShelter.showDialog(this.$data.geosearchLocation)
-								this.$data.geosearchLocation = null
+							const geosearchPayload = this.getGeosearchDialogPayload()
+							if (geosearchPayload != null) {
+								await this.$refs.addShelter.showDialog(geosearchPayload)
 							}
 						},
 					},
@@ -222,15 +217,9 @@ export default {
 					{
 						text: 'Přidat terč podle adresy..',
 						callback: async () => {
-							//console.log(this.$data.geosearchLocation)
-							if(this.$data.geosearchLocation != null) {							
-								this.$data.geosearchLocation.lng = this.$data.geosearchLocation.x
-								this.$data.geosearchLocation.lat = this.$data.geosearchLocation.y
-								await this.$refs.addTarget.showDialog(this.$data.geosearchLocation)
-								await this.$refs.addTarget.showDialog(this.$data.geosearchLocation)
-								this.$refs.addTarget.$forceUpdate()
-								await this.$refs.addTarget.showDialog(this.$data.geosearchLocation)
-								this.$data.geosearchLocation = null
+							const geosearchPayload = this.getGeosearchDialogPayload()
+							if (geosearchPayload != null) {
+								await this.$refs.addTarget.showDialog(geosearchPayload)
 							}
 						},
 					},
@@ -429,6 +418,18 @@ export default {
 	},
 
 	methods: {
+		getGeosearchDialogPayload() {
+			if (!this.geosearchLocation) {
+				return null
+			}
+
+			return {
+				...this.geosearchLocation,
+				lng: this.geosearchLocation.x,
+				lat: this.geosearchLocation.y,
+				label: this.geosearchLocation.label || this.geosearchQuery || null
+			}
+		},
 		showSidebar() {
 			if (!this.sidebar) {
 				return
@@ -518,9 +519,18 @@ export default {
 							searchLabel: 'Zadejte adresu',
 							updateMap: false
 				});
+				const geosearchInput = search.searchElement?.input
+
+				if (geosearchInput) {
+					this.$data.geosearchQuery = geosearchInput.value || ''
+					geosearchInput.addEventListener('input', (event) => {
+						this.$data.geosearchQuery = event.target?.value || ''
+					})
+				}
 
 				this.map.on('geosearch/showlocation', (data) => {
 					this.$data.geosearchLocation = data.location
+					this.$data.geosearchQuery = this.$data.geosearchQuery || data.location.label || ''
 					this.map.setView(
 						[data.location.y, data.location.x],
 						GEOSEARCH_RESULT_ZOOM,
