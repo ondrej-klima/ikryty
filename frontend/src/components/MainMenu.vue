@@ -66,6 +66,12 @@
           </v-icon>
           {{ $t("menu.buildingDetails") }}
         </v-tab>
+        <v-tab value="option-4">
+          <v-icon start>
+            mdi-crosshairs-gps
+          </v-icon>
+          {{ $t("menu.targetDetails") }}
+        </v-tab>
       </v-tabs>
       <v-window v-model="tab">
         <v-window-item value="option-1">
@@ -82,7 +88,11 @@
         <v-window-item value="option-2">
           <v-card flat>
             <v-card-text>
-              <v-data-table :items="targetItems" :headers="targetHeaders"></v-data-table>
+              <v-data-table
+                :items="targetItems"
+                :headers="targetHeaders"
+                :row-props="getTargetRowProps"
+              ></v-data-table>
             </v-card-text>
           </v-card>
         </v-window-item>
@@ -102,6 +112,26 @@
               </div>
               <div v-else class="building-details__empty">
                 {{ $t("menu.noBuildingSelected") }}
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-window-item>
+        <v-window-item value="option-4">
+          <v-card flat>
+            <v-card-text>
+              <div v-if="selectedTarget" class="building-details">
+                <div class="building-details__title">{{ $t("menu.selectedTarget") }}</div>
+                <table class="building-details__table">
+                  <tbody>
+                    <tr v-for="entry in selectedTargetEntries" :key="entry.key">
+                      <th scope="row">{{ entry.label }}</th>
+                      <td>{{ entry.value }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div v-else class="building-details__empty">
+                {{ $t("menu.noTargetSelected") }}
               </div>
             </v-card-text>
           </v-card>
@@ -175,8 +205,14 @@ export default {
     selectedBuildingId() {
       return useSearchStore().selectedBuildingId
     },
+    selectedTargetId() {
+      return useSearchStore().selectedTargetId
+    },
     selectedBuilding() {
       return useSearchStore().selectedBuilding
+    },
+    selectedTarget() {
+      return useSearchStore().selectedTarget
     },
     selectedBuildingEntries() {
       if (!this.selectedBuilding) {
@@ -185,15 +221,15 @@ export default {
 
       const fieldLabels = {
         id: 'ID',
-        building_code: this.$t('menu.buildingCode'),
+        building_code: this.$t('step1.rs1'),
         user_id: this.$t('menu.user'),
-        name_address: this.$t('shelter.shelterAddress'),
+        name_address: this.$t('step1.rs2'),
         max_s_c: this.$t('menu.score'),
         total_n_k: this.$t('menu.capacityShort'),
         total_n_ks: this.$t('menu.capacityMedium'),
         total_n_kd: this.$t('menu.capacityLong'),
-        gps_lat: `${this.$t('menu.coordinates')} LAT`,
-        gps_long: `${this.$t('menu.coordinates')} LNG`
+        gps_lat: this.$t('step1.rs3_lat'),
+        gps_long: this.$t('step1.rs3_long')
       }
 
       return Object.entries(this.selectedBuilding)
@@ -204,6 +240,29 @@ export default {
           value: this.formatBuildingEntryValue(key, value)
         }))
     },
+    selectedTargetEntries() {
+      if (!this.selectedTarget) {
+        return []
+      }
+
+      const fieldLabels = {
+        id: 'ID',
+        user: this.$t('menu.user'),
+        name: this.$t('target.targetName'),
+        address: this.$t('target.targetAddress'),
+        x: this.$t('target.latitude'),
+        y: this.$t('target.longitude'),
+        description: this.$t('target.targetDescription')
+      }
+
+      return Object.entries(this.selectedTarget)
+        .filter(([, value]) => value !== null && value !== undefined && value !== '')
+        .map(([key, value]) => ({
+          key,
+          label: fieldLabels[key] || key,
+          value: this.formatTargetEntryValue(key, value)
+        }))
+    },
     visibleCapacityTotals() {
       return useSearchStore().visibleCapacityTotals
     }
@@ -212,6 +271,11 @@ export default {
     selectedBuilding(value) {
       if (value) {
         this.tab = 'option-3'
+      }
+    },
+    selectedTarget(value) {
+      if (value) {
+        this.tab = 'option-4'
       }
     }
   },
@@ -230,6 +294,20 @@ export default {
         }
       }
     },
+    getTargetRowProps({ item }) {
+      const target = item?.raw || item
+      const isSelected = target?.id === this.selectedTargetId
+
+      return {
+        class: isSelected ? 'main-menu__row--selected' : '',
+        onClick: () => {
+          if (target?.id != null) {
+            useSearchStore().setSelectedTargetId(target.id)
+            this.tab = 'option-4'
+          }
+        }
+      }
+    },
     formatBuildingEntryValue(key, value) {
       if (['gps_lat', 'gps_long'].includes(key)) {
         return Number(value).toFixed(6)
@@ -237,6 +315,13 @@ export default {
 
       if (key === 'max_s_c') {
         return Number(value).toFixed(2)
+      }
+
+      return value
+    },
+    formatTargetEntryValue(key, value) {
+      if (['x', 'y'].includes(key)) {
+        return Number(value).toFixed(6)
       }
 
       return value

@@ -66,6 +66,7 @@
 				:options="options"
 			/>
 			<l-geo-json
+				:key="`targets-${selectedTargetId ?? 'none'}`"
 				:geojson="filteredTargetGeojson"
 				:options="targetOptions"
 			/>
@@ -248,24 +249,16 @@ export default {
 			},
 			targetOptions: {
 				pointToLayer: (feature, latlng) => {
-					let color = 'red'; // Default color
-					/*
-					if (feature.properties.type === 'capital') {
-						color = 'red';
-					}*/
-
-					// This part of the code remains the same.
-					// The plugin attaches itself to the global L object as L.ExtraMarkers
-					const extraMarkerIcon = L.ExtraMarkers.icon({
-						icon: 'fa-star', // Example icon (requires Font Awesome)
-						markerColor: color, // 'red', 'orange', 'yellow', 'green', 'blue', 'purple', 'violet', 'pink', 'cyan'
-						shape: 'circle',
-						prefix: 'fa'
+					return L.marker(latlng, {
+						icon: this.createTargetMarkerIcon(feature)
 					});
-					
-					return L.marker(latlng, { icon: extraMarkerIcon });
 				},
 				onEachFeature: (feature, layer) => {
+					layer.on('click', () => {
+						useSearchStore().setSelectedTargetId(feature.id)
+						this.showSidebar()
+					})
+
 					layer.bindTooltip(feature.properties.name || feature.properties.address|| 'Terč ' + feature.id)
 					/*
 					layer.bindTooltip(feature.properties.name,
@@ -317,6 +310,9 @@ export default {
 	computed: {
 		selectedBuildingId() {
 			return useSearchStore().selectedBuildingId
+		},
+		selectedTargetId() {
+			return useSearchStore().selectedTargetId
 		},
 		searchQuery: {
 			get() {
@@ -486,6 +482,16 @@ export default {
 				extraClasses: isSelected ? 'is-selected-shelter-marker' : ''
 			})
 		},
+		createTargetMarkerIcon(feature) {
+			const isSelected = feature.id === this.selectedTargetId
+			return L.ExtraMarkers.icon({
+				icon: 'fa-star',
+				markerColor: 'red',
+				shape: 'circle',
+				prefix: 'fa',
+				extraClasses: isSelected ? 'is-selected-target-marker' : ''
+			})
+		},
 		/**
          * Inicializuje ovládací prvky mapy po jejím načtení.
          * Přidává Sidebar, EasyButton pro menu, GeoSearch, LocateControl a další panely.
@@ -608,6 +614,10 @@ export default {
 }
 
 .is-selected-shelter-marker {
+	filter: drop-shadow(0 0 8px rgba(15, 23, 42, 0.35));
+}
+
+.is-selected-target-marker {
 	filter: drop-shadow(0 0 8px rgba(15, 23, 42, 0.35));
 }
 
