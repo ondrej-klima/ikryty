@@ -331,6 +331,7 @@ export default {
       try {
         const response = await api.exportBuildingsWorkbook({
           building_ids: useSearchStore().filteredBuildingIds,
+          target_ids: useSearchStore().filteredTargetIds,
         })
         const blobUrl = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')

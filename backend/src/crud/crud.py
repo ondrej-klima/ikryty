@@ -71,6 +71,8 @@ BUILDING_EXPORT_FIELDS = [
     "name_address",
     "gps_lat",
     "gps_long",
+    "s_jtsk_x",
+    "s_jtsk_y",
     "owner",
     "administrator",
     "access_restricted",
@@ -110,6 +112,8 @@ SHELTER_EXPORT_FIELDS = [
     ("building.name_address", "RS_2", "Název / adresa stavby"),
     ("building.gps_lat", "RS_3", "GPS souřadnice (šířka, WGS-84)"),
     ("building.gps_long", "RS_3", "GPS souřadnice (délka, WGS-84)"),
+    ("building.s_jtsk_x", "S-JTSK_X", "Souřadnice X v systému S-JTSK"),
+    ("building.s_jtsk_y", "S-JTSK_Y", "Souřadnice Y v systému S-JTSK"),
     ("shelter_code", None, None),
     ("location", None, None),
     ("schema_path", None, None),
@@ -161,6 +165,17 @@ SHELTER_FILE_EXPORT_FIELDS = [
     ("filename", "SOUBOR", "Název souboru"),
 ]
 
+TARGET_EXPORT_FIELDS = [
+    ("user", "LOGIN", "Login uživatele"),
+    ("name", "T_1", "Název cíle"),
+    ("description", "T_2", "Popis cíle"),
+    ("address", "T_3", "Adresa cíle"),
+    ("x", "T_4", "GPS souřadnice (šířka, WGS-84)"),
+    ("y", "T_4", "GPS souřadnice (délka, WGS-84)"),
+    ("x_sjtsk", "S-JTSK_X", "Souřadnice X v systému S-JTSK"),
+    ("y_sjtsk", "S-JTSK_Y", "Souřadnice Y v systému S-JTSK"),
+]
+
 
 # ==============================================================================
 # AUTHORIZATION & HELPER FUNCTIONS
@@ -198,6 +213,18 @@ def _get_visible_buildings_query(current_user: Dict[str, Any], building_ids: Opt
 
     if building_ids is not None:
         query = query.filter(id__in=building_ids)
+
+    return query
+
+
+def _get_visible_targets_query(current_user: Dict[str, Any], target_ids: Optional[List[int]] = None):
+    if _is_supervisor(current_user):
+        query = models.Targets.all()
+    else:
+        query = models.Targets.filter(user=current_user.get('preferred_username'))
+
+    if target_ids is not None:
+        query = query.filter(id__in=target_ids)
 
     return query
 
@@ -266,13 +293,14 @@ def _append_row(worksheet, values: List[Any]):
     worksheet.append([_format_export_value(value) for value in values])
 
 
-def _build_export_workbook(buildings: List[models.Building]) -> bytes:
+def _build_export_workbook(buildings: List[models.Building], targets: List[models.Targets]) -> bytes:
     workbook = Workbook()
     buildings_sheet = workbook.active
     buildings_sheet.title = "Registr staveb"
     shelters_sheet = workbook.create_sheet("Registr improvizovaných úkrytů")
     building_files_sheet = workbook.create_sheet("Soubory staveb")
     shelter_files_sheet = workbook.create_sheet("Soubory úkrytů")
+    targets_sheet = workbook.create_sheet("Potenciální cíle")
 
     building_headers = []
     for field_name in BUILDING_EXPORT_FIELDS:
@@ -290,6 +318,7 @@ def _build_export_workbook(buildings: List[models.Building]) -> bytes:
 
     _set_sheet_headers(building_files_sheet, [(caption, abbreviation) for _, abbreviation, caption in BUILDING_FILE_EXPORT_FIELDS])
     _set_sheet_headers(shelter_files_sheet, [(caption, abbreviation) for _, abbreviation, caption in SHELTER_FILE_EXPORT_FIELDS])
+    _set_sheet_headers(targets_sheet, [(caption, abbreviation) for _, abbreviation, caption in TARGET_EXPORT_FIELDS])
 
     for building in buildings:
         if not _has_valid_coordinates(building.gps_lat, building.gps_long):
@@ -339,14 +368,25 @@ def _build_export_workbook(buildings: List[models.Building]) -> bytes:
                         ],
                     )
 
+    for target in targets:
+        if not _has_valid_coordinates(target.x, target.y):
+            continue
+
+        _append_row(
+            targets_sheet,
+            [_resolve_attr(target, field_name) for field_name, _, _ in TARGET_EXPORT_FIELDS],
+        )
+
     buildings_sheet.freeze_panes = "A3"
     shelters_sheet.freeze_panes = "A3"
     building_files_sheet.freeze_panes = "A3"
     shelter_files_sheet.freeze_panes = "A3"
+    targets_sheet.freeze_panes = "A3"
     _autosize_columns(buildings_sheet)
     _autosize_columns(shelters_sheet)
     _autosize_columns(building_files_sheet)
     _autosize_columns(shelter_files_sheet)
+    _autosize_columns(targets_sheet)
 
     output = BytesIO()
     workbook.save(output)
@@ -1146,6 +1186,11 @@ async def get_buildings_summary(current_user: Dict[str, Any]) -> List[schemas.Bu
     return results
 
 
-async def export_visible_buildings_and_shelters(current_user: Dict[str, Any], building_ids: Optional[List[int]] = None) -> bytes:
+async def export_visible_buildings_and_shelters(
+    current_user: Dict[str, Any],
+    building_ids: Optional[List[int]] = None,
+    target_ids: Optional[List[int]] = None,
+) -> bytes:
     buildings = await _get_visible_buildings_query(current_user, building_ids=building_ids).prefetch_related("shelters")
-    return _build_export_workbook(buildings)
+    targets = await _get_visible_targets_query(current_user, target_ids=target_ids)
+    return _build_export_workbook(buildings, targets)

@@ -335,6 +335,7 @@ async def export_filtered_buildings_xlsx(
     workbook_bytes = await crud.export_visible_buildings_and_shelters(
         current_user,
         building_ids=export_filter.building_ids,
+        target_ids=export_filter.target_ids,
     )
     return Response(
         content=workbook_bytes,

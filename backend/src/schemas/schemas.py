@@ -237,3 +237,4 @@ class BuildingSummarySchema(BaseModel):
 
 class BuildingExportFilterSchema(BaseModel):
     building_ids: List[int] = []
+    target_ids: List[int] = []
