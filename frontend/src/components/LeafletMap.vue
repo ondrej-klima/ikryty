@@ -2,6 +2,7 @@
 	<div class="map">
 		<div ref="mapSearch" class="map-search">
 			<v-text-field
+				class="map-search__field"
 				v-model="searchQuery"
 				prepend-inner-icon="mdi-magnify"
 				clearable
@@ -9,6 +10,16 @@
 				variant="solo"
 				hide-details
 				label="Filtrovat podle adresy"
+			/>
+			<v-text-field
+				class="map-search__field"
+				v-model="buildingCodeQuery"
+				prepend-inner-icon="mdi-pound"
+				clearable
+				density="compact"
+				variant="solo"
+				hide-details
+				label="Filtrovat podle RS_1"
 			/>
 		</div>
 		<l-map ref="map" :zoom="zoom" :center="[49.2265592, 16.5957531]" :options="mapOptions" @ready="addControls">
@@ -315,6 +326,14 @@ export default {
 				useSearchStore().setSearchQuery(value)
 			}
 		},
+		buildingCodeQuery: {
+			get() {
+				return useSearchStore().buildingCodeQuery
+			},
+			set(value) {
+				useSearchStore().setBuildingCodeQuery(value)
+			}
+		},
 		filteredGeojson() {
 			const shelterStore = useShelterStore()
 			const filteredIds = new Set(useSearchStore().filteredBuildingIds)
@@ -597,8 +616,22 @@ export default {
 	top: 12px;
 	left: 50%;
 	transform: translateX(-50%);
-	width: min(420px, calc(100% - 24px));
+	display: flex;
+	gap: 8px;
+	align-items: flex-start;
+	flex-wrap: wrap;
+	width: min(840px, calc(100% - 24px));
 	z-index: 1000;
+}
+
+.map-search__field {
+	flex: 1 1 320px;
+}
+
+@media (max-width: 720px) {
+	.map-search {
+		width: min(420px, calc(100% - 24px));
+	}
 }
 
 #tooltip {
