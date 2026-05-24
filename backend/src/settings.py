@@ -39,17 +39,11 @@ UVICORN_RELOAD = _env_flag(
     "UVICORN_RELOAD_PRODUCTION" if IS_PRODUCTION else "UVICORN_RELOAD_LOCAL",
     default=not IS_PRODUCTION,
 )
-UVICORN_SSL_KEYFILE = os.getenv("UVICORN_SSL_KEYFILE") or None
-UVICORN_SSL_CERTFILE = os.getenv("UVICORN_SSL_CERTFILE") or None
 
 
 def get_uvicorn_run_kwargs() -> dict:
-    kwargs = {
+    return {
         "host": UVICORN_HOST,
         "port": UVICORN_PORT,
         "reload": UVICORN_RELOAD,
     }
-    if IS_PRODUCTION and UVICORN_SSL_KEYFILE and UVICORN_SSL_CERTFILE:
-        kwargs["ssl_keyfile"] = UVICORN_SSL_KEYFILE
-        kwargs["ssl_certfile"] = UVICORN_SSL_CERTFILE
-    return kwargs
